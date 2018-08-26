@@ -1,0 +1,74 @@
+
+
+Apache Web Server - Secure
+
+To check openssl
+	rpm -q openssl
+
+To Check mod_ssl
+	cd etc/httpd/modules/
+	ls -lrt | grep -i mod_ssl
+
+To install mod_ssl
+	yum install mod_ssl
+
+The main configuration file for Secure Apache WebServer is 
+	/etc/httpd/conf.d/ssl.conf 
+
+Digitally Signing the Server 
+	1. Creating the public key
+	2. Provide the pubic key to reputable CA 
+	3. CA will provide a certificate for your publec Key 
+	4. You have to put that certificate to your "ssl" derectory key 
+
+To enable SSL Connection update below in /etc/httpd/conf.d/ssl.conf
+	Listen 443 https
+	LodModule ssl_module modules/mod_ssl.so 
+
+HTTPS/SSL : Adding VirtualHost
+	<VirtualHost *:443>
+	or
+	<VirtualHost SERVER-IP:443> // Does not support Host name
+
+HTTPS/SSL : DocumentRoot
+	Specify the Directory where all your webpages should be there
+	Recomended to have different root for secure and non-secure
+	Default location is - /var/www/html 
+
+HTTPS/SSL : ServerName 
+	ServerName is name of your website. 
+	Ex: www.yourserver.com:443 
+
+HTTPS/SSL : Create Server Keys
+	openssl genrsa -des3 -out server.key 4096
+	where:
+		out: to specofy output file (server.key)
+		4096: Length of your Key
+	After kay got created it will ask for the password to use. 
+
+HTTPS/SSL : Create Certificate Signing Request (CSR)
+	Must ask our CA (e.g. Equifax, verisign, etc) to sign our certificate 
+	You might receive server.csr or/and signed kays from CA 
+
+HTTPS/SSL : To verify your server public key (server.key)
+	openssl rsa -noout -text -in server.key 
+
+HTTPS/SSL : To Specify the Location of the Certificates  (ssl.comf)
+	We need to specify the name and location of our certificate in ssl.conf file
+	default ssl.conf location is /etc/pki/tls/certs - for RHEL 7
+
+		SSLCertificateFile /etc/pki/tls/certs/server.crt 
+		SSLCertificateKeyFile /etc/pki/tls/private/server.key 
+
+		In /etc/httpd/conf.d 
+		CA (Certificate Autority) 
+			directory location of the CA certificate 
+			SSLCACertificateFile /etc/pki/tls/certs/myca.crt 
+
+	cp server.key /etc/pki/tls/private/server.key
+	cp server.crt /etc/pki/tls/certs/server.crt 
+	cp myca.crt /etc/pki/tls/certs/myca.crt 
+	Restart the Apache web Server to take effect
+
+
+

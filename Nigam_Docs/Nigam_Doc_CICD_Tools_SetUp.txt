@@ -1,0 +1,67 @@
+Setting up ssh keys
+You must configure ssh keys between your machine and remote servers specified in ~/hosts file:
+$ ssh-keygen -t rsa -b 4096 -C "My ansisble key"
+
+Use scp or ssh-copy-id command to copy your public key file (e.g., $HOME/.ssh/id_rsa.pub) to your account on the remote server/host:
+$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub root@server1.cyberciti.biz
+$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub root@10.98.222.4
+$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub root@10.98.222.7
+$ ssh-copy-id -i $HOME/.ssh/id_rsa.pub root@10.98.222.8
+$ eval $(ssh-agent)
+$ ssh-add
+
+Now ansible can talk to all remote servers using ssh command.
+
+# ----------------------------------------------------------
+mvn sonar:sonar \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=734cab372080dd91ae41c78cf70801d4f714e66e
+# ----------------------------------------------------------
+
+
+
+
+node {
+
+    deleteDir()
+
+    stage('CheckOut') {
+        git url: 'git@github.com:rout-devops/RoutAppRepo.git'
+        sh "git checkout master"
+       // sh "curl -u admin:admin -X PUT 'http://localhost:8081/artifactory/libs-release-local/NigamTestApp1.war' -T NigamTestApp1.war"
+    }
+
+    stage('Build') {
+        sh "cd NigamTestApp1"
+        sh "with maven -Dmaven.test.failure.ignore=true install"
+    }
+}
+
+
+pipeline {
+    agent any tools {
+        maven 'maven_3.5.3'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn -version'
+            }
+        }
+    }
+}
+
+
+
+# ----------------------------------------------
+
+
+
+Ant SetUp:
+  unzip <zip-file-name> -d <destination-folder-path>
+  cd <destination-folder-path>
+  ln -sf /home/nigam/Build-Tool/apache-ant-1.10.3 /usr/local/ant
+  vim /etc/profile.d/ant.sh
+    export ANT_HOME=/usr/local/ant
+    export   PATH=${ANT_HOME}/bin:${PATH}
+  source /etc/profile

@@ -1,0 +1,27 @@
+# To Bring up the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> up
+# docker-compose -f Docker-Compose_Tomcat_Cluster.yml up
+
+# To Bring down the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> down
+# docker-compose -f Docker-Compose_Tomcat_Cluster.yml down
+
+# Creating Webserver with NGINX
+
+#foobar = 'Hello World !'
+#values1:
+#    - tomcat_home1 = '/usr/local/tomcat'
+
+values:
+  - tompath: "/usr/local/tomcat"
+  #- *ref  # Reused content
+
+# Creating Tomcat Server 1
+Server1:
+  image: tomcat
+  hostname: TomcatServer1
+  container_name: TomcatServer1
+  volumes:
+    - ${PWD}/tomcat-users.xml:${tompath}/conf/tomcat-users.xml
+    - ${PWD}/server.xml:${tompath}/conf/server.xml
+    - ${PWD}/ROOT:${tompath}/webapps/ROOT

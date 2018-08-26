@@ -1,0 +1,59 @@
+WebServer:
+  image: nginx
+  hostname: NginxWebServer
+  container_name: NginxWebServer
+  ports:
+    - "8080:80"
+  volumes:
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/default.conf:/etc/nginx/conf.d/default.conf
+  links:
+    - TomcatServer1:server1
+    - TomcatServer2:server2
+    - TomcatServer3:server3
+    - TomcatServer4:server4
+    - TomcatServer5:server5
+
+TomcatServer1:
+  image: tomcat
+  hostname: TomcatServer1
+  container_name: TomcatServer1
+  volumes:
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/server.xml:/usr/local/tomcat/conf/server.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/ROOT:/usr/local/tomcat/webapps/ROOT
+
+TomcatServer2:
+  image: tomcat
+  hostname: TomcatServer2
+  container_name: TomcatServer2
+  volumes:
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/server.xml:/usr/local/tomcat/conf/server.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/ROOT:/usr/local/tomcat/webapps/ROOT
+
+TomcatServer3:
+  image: tomcat
+  hostname: TomcatServer3
+  container_name: TomcatServer3
+  volumes:
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/server.xml:/usr/local/tomcat/conf/server.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/ROOT:/usr/local/tomcat/webapps/ROOT
+
+TomcatServer4:
+  image: tomcat
+  hostname: TomcatServer4
+  container_name: TomcatServer4
+  volumes:
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/server.xml:/usr/local/tomcat/conf/server.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/ROOT:/usr/local/tomcat/webapps/ROOT
+
+TomcatServer5:
+  image: tomcat
+  hostname: TomcatServer5
+  container_name: TomcatServer5
+  volumes:
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/server.xml:/usr/local/tomcat/conf/server.xml
+    - /home/nigam/Nigam_DevOps/Nigam_Docker/webserver-tomcat-cluster/ROOT:/usr/local/tomcat/webapps/ROOT

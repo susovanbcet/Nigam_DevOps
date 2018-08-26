@@ -1,0 +1,27 @@
+## 
+## docker-compose --file ./dc1.yml down -v 
+##
+version: '3'
+
+# Defining All services
+services: 
+
+  #1. Defining Apache HTTP server
+  httpd_web:
+    image: httpd
+    ports:
+      - "8080:80"
+
+  #2. Defining MySQL DB server  
+  mysql_db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_USER=nigam
+      - MYSQL_PASSWORD=nigampass
+
+  #3. Defining Tomcat WebServer
+  tomcat_serv:
+    image: tomcat:8.0
+    ports: 
+      - "8888:8080"

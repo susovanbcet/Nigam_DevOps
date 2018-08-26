@@ -1,0 +1,42 @@
+
+[server_web]
+webserver01 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+webserver11 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+
+[server_app]
+appserver01 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver02 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver03 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver04 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver11 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver12 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver13 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver14 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+
+[server_db]
+dbserver01  ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+dbserver02  ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+dbserver11  ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+dbserver12  ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+
+[ubuntu]
+webserver01 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver01 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver02 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver03 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver04 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+dbserver01  ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+dbserver02  ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+
+[centos]
+webserver11 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver11 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver12 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver13 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+appserver14 ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+dbserver11  ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+dbserver12  ansible_connection=docker ansible_python_interpreter=/usr/bin/python3
+
+[local]
+localhost ansible_connection=local 
+

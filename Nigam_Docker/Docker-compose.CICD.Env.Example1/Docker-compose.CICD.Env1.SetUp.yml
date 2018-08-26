@@ -1,0 +1,125 @@
+# To Bring up the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> up -d
+# docker-compose -f Docker-compose.CICD.Env1.SetUp.yml up -d
+
+# To Bring down the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> down
+# docker-compose -f Docker-compose.CICD.Env1.SetUp.yml down
+
+
+
+#apt-get update -y && apt-get install --no-install-recommends -y software-properties-common
+
+version: "3.2"
+#ARG buildno
+#RUN echo "Build number: $buildno"
+# ========================================================================================
+services:
+  web_server_nginx:
+    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.CICD.Env1.NGINX
+      args:
+        buildno: umesh
+    image: nigamrout/cicd.env1.nginx_1
+    hostname: web_server
+    container_name: web_server
+    ports:
+      - "80:80"
+    environment:
+      TZ: America/New_York
+    volumes:
+      - ${PWD}/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - app_server_tomcat1:server1
+      - app_server_tomcat2:server2
+    networks:
+         - network1
+#    entrypoint: "apt-get update -y && apt-get install --no-install-recommends -y software-properties-common"
+# ---------------------------------------------------------------------------------------
+  app_server_tomcat1:
+    build:
+      context: .
+      dockerfile: Dockerfile.CICD.Env1.Tomcat_8.5.31
+      args:
+        buildno: umesh
+    image: nigamrout/cicd.env1.tomcat_1_8.5.31
+    #image: tomcat:8.5.31
+    hostname: app_server1
+    container_name: app_server1
+    environment:
+      TZ: America/New_York
+    depends_on:
+      - db_server_mysql
+    volumes:
+      - ${PWD}/server.xml:/usr/local/tomcat/conf/server.xml
+      - ${PWD}/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ${PWD}/index_Tomcat_8.5.31.jsp:/usr/local/tomcat/webapps/ROOT/index.jsp
+      - ${PWD}/context_manager.xml:/usr/local/tomcat/webapps/manager/META-INF/context.xml
+      - ${PWD}/context_manager.xml:/usr/local/tomcat/webapps/host-manager/META-INF/context.xml
+    links:
+      - db_server_mysql
+    networks:
+         - network1
+         - network2
+#    entrypoint: "apt-get update -y && apt-get install --no-install-recommends -y software-properties-common"
+# . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  app_server_tomcat2:
+    build:
+      context: .
+      dockerfile: Dockerfile.CICD.Env1.Tomcat_8.5.31
+      args:
+        buildno: umesh
+    image: nigamrout/cicd.env1.tomcat_2_8.5.31
+    #image: tomcat:8.5.31
+    hostname: app_server2
+    container_name: app_server2
+#    restart: always
+    environment:
+      TZ: America/New_York
+    depends_on:
+      - db_server_mysql
+    volumes:
+      - ${PWD}/server.xml:/usr/local/tomcat/conf/server.xml
+      - ${PWD}/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ${PWD}/index_Tomcat_8.5.31.jsp:/usr/local/tomcat/webapps/ROOT/index.jsp
+      - ${PWD}/context_manager.xml:/usr/local/tomcat/webapps/manager/META-INF/context.xml
+      - ${PWD}/context_manager.xml:/usr/local/tomcat/webapps/host-manager/META-INF/context.xml
+    links:
+      - db_server_mysql
+    networks:
+         - network1
+         - network2
+#    entrypoint: "apt-get update -y && apt-get install --no-install-recommends -y software-properties-common"
+# ---------------------------------------------------------------------------------------
+  db_server_mysql:
+    #image: mariadb
+    build:
+      context: .
+      dockerfile: Dockerfile.CICD.Env1.MySQL
+      args:
+        buildno: umesh
+    image: nigamrout/cicd.env1.mysql_1
+    hostname: db_server
+    container_name: db_server
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpW
+      MYSQL_DATABASE: dbapp1
+      MYSQL_USER: app1
+      MYSQL_PASSWORD: app1
+      TZ: America/New_York
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+         - network2
+# ========================================================================================
+networks:
+  network1:
+  network2:
+
+volumes:
+  mydata:
+  mysql-data:

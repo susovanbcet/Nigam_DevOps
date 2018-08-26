@@ -1,0 +1,79 @@
+# To Bring up the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> up
+# docker-compose -f Docker-Compose_Tomcat_Cluster.yml up
+
+# To Bring down the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> down
+# docker-compose -f Docker-Compose_Tomcat_Cluster.yml down
+
+
+# Creating Webserver with NGINX
+WebServer:
+  image: nginx
+  hostname: NginxWebServer
+  container_name: NginxWebServer
+  ports:
+    - "9080:80"
+  volumes:
+    - ${PWD}/default.conf:/etc/nginx/conf.d/default.conf
+  links:
+    - TomcatServer1:server1
+    - TomcatServer2:server2
+    - TomcatServer3:server3
+    - TomcatServer4:server4
+    - TomcatServer5:server5
+
+
+# Creating Tomcat Server 1
+TomcatServer1:
+  image: tomcat
+  hostname: TomcatServer1
+  container_name: TomcatServer1
+  volumes:
+    - ${PWD}/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - ${PWD}/server.xml:/usr/local/tomcat/conf/server.xml
+    - ${PWD}/ROOT:/usr/local/tomcat/webapps/ROOT
+
+
+# Creating Tomcat Server 2
+TomcatServer2:
+  image: tomcat
+  hostname: TomcatServer2
+  container_name: TomcatServer2
+  volumes:
+    - ${PWD}/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - ${PWD}/server.xml:/usr/local/tomcat/conf/server.xml
+    - ${PWD}/ROOT:/usr/local/tomcat/webapps/ROOT
+
+
+# Creating Tomcat Server 3
+TomcatServer3:
+  image: tomcat
+  hostname: TomcatServer3
+  container_name: TomcatServer3
+  volumes:
+    - ${PWD}/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - ${PWD}/server.xml:/usr/local/tomcat/conf/server.xml
+    - ${PWD}/ROOT:/usr/local/tomcat/webapps/ROOT
+
+
+# Creating Tomcat Server 4
+TomcatServer4:
+  image: tomcat
+  hostname: TomcatServer4
+  container_name: TomcatServer4
+  volumes:
+    - ${PWD}/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - ${PWD}/server.xml:/usr/local/tomcat/conf/server.xml
+    - ${PWD}/ROOT:/usr/local/tomcat/webapps/ROOT
+
+
+# Creating Tomcat Server 5
+TomcatServer5:
+  image: tomcat
+  hostname: TomcatServer5
+  container_name: TomcatServer5
+  volumes:
+    - ${PWD}/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+    - ${PWD}/server.xml:/usr/local/tomcat/conf/server.xml
+    - ${PWD}/ROOT:/usr/local/tomcat/webapps/ROOT

@@ -1,0 +1,75 @@
+# To Bring up the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> up
+# docker-compose -f Docker-Compose_Tomcat_Cluster.yml up
+
+# To Bring down the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> down
+# docker-compose -f Docker-Compose_Tomcat_Cluster.yml down
+
+version: "3.2"
+
+ARG buildno
+ARG gitcommithash
+
+RUN echo "Build number: $buildno"
+RUN echo "Based on commit: $gitcommithash"
+# ========================================================================================
+services:
+  webserver:
+
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    entrypoint: /code/entrypoint.sh
+    environment:
+      - RACK_ENV=development
+      - SHOW=true
+      - SESSION_SECRET
+    links:
+      - appserver
+    networks:
+         - network1
+# ---------------------------------------------------------------------------------------
+  appserver:
+    image: tomcat
+    depends_on:
+      - db
+    deploy:
+      replicas: 6
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+      restart: always
+    hostname: TomcatServer
+    container_name: TomcatServer
+    command: bundle exec thin -p 3000
+    volumes:
+      - ${PWD}/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ${PWD}/server.xml:/usr/local/tomcat/conf/server.xml
+      - ${PWD}/ROOT:/usr/local/tomcat/webapps/ROOT
+    command: bundle exec thin -p 3000
+    links:
+      - db:database
+    networks:
+         - network1
+         - network2
+# ---------------------------------------------------------------------------------------
+  db:
+    image: mysql
+    volumes:
+      - data-volume:/var/lib/db
+  backup:
+    image: backup-service
+    volumes:
+      - data-volume:/var/lib/backup/data
+# ========================================================================================
+networks:
+  webnet:
+
+volumes:
+  mydata:
+  data-volume:

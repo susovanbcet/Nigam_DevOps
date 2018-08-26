@@ -1,0 +1,338 @@
+[nigam@localhost ~]$ sudo su -
+[root@localhost ~]# yum install -y yum-utils device-mapper-persistent-data lvm2
+[root@localhost ~]# yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+[root@localhost ~]# yum install docker-ce -y
+[root@localhost ~]# systemctl start docker
+[root@localhost ~]# systemctl enable docker
+[root@localhost ~]# usermod -aG docker nigam
+[root@localhost ~]# exit
+[nigam@localhost ~]$ sudo docker run hello-world
+[nigam@localhost ~]$ docker --version
+Docker version 18.03.0-ce, build 0520e24
+
+* Install Docke-Machine
+========================
+  base=https://github.com/docker/machine/releases/download/v0.14.0 &&
+  curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
+  sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+
+[nigam@localhost ~]$ docker-machine --version
+
+
+* Install Docke-Compose
+========================
+[nigam@localhost ~]$ sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+[nigam@localhost ~]$ sudo su -
+[root@localhost ~]# docker images --help
+[root@localhost ~]# docker pull busybox
+[root@localhost ~]# docker run --detach --name server busybox
+[root@localhost ~]# docker rm server
+[root@localhost ~]# docker run --detach --name server busybox sh -c "while true; do sleep 5; done"
+[root@localhost ~]# docker stop server
+[root@localhost ~]# docker start server
+[root@localhost ~]# docker restart server
+[root@localhost ~]# docker rm server
+[root@localhost ~]# docker run -itd --name server busybox
+[root@localhost ~]# docker attach <container-id/name>
+/ # df -h
+[root@localhost ~]# docker run -it --rm --net none busybox ifconfig
+[root@localhost ~]# docker run -it --rm --net bridge busybox ifconfig
+[root@localhost ~]# docker run -it --rm --net host busybox ifconfig
+[root@localhost ~]# docker run -itd --name webserver1 --net host httpd
+[root@localhost ~]# docker run -d --name webserver2 -p 8080:80 -v "$(pwd)":/user/local/apache2/htdocs httpd
+[root@localhost opt]# docker ps
+[root@localhost opt]# yum install mysql
+[root@localhost opt]# docker inspect wordpressdb
+[root@localhost opt]# yum install epel-release
+[root@localhost opt]# yum -y install ansibl
+[root@localhost opt]# ansible --version
+[root@localhost opt]# python --version
+[root@localhost opt]# easy_install pip
+[root@localhost ansible]# yum -y install epel-release
+[root@localhost ansible]# yum -y groupinstall development 
+[root@localhost ansible]# yum install curl-devel expat-devel gettext-devel openssl-devel
+[root@localhost ansible]# ln -s /usr/bin/db2x_docbook2texi/usr/bin/docbook2x-texi
+[nigam@localhost ~]$ git clone https://git.kernel.org/pub/scm/git/git.git
+[nigam@localhost ~]$ sudo make all doc prefix=/usr && sudo make install install-doc install-html install-man prefix=/usr
+[root@localhost ~]# make all doc prefix=/usr && sudo make install install-doc install-html install-man prefix=/usr
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+Docker Container
+================
+*	Start a Container from image "nginx"
+	docker container run --publish 80:80 nginx
+
+*	Run in background --detach or -d
+	docker container run --publish 80:80 --detach nginx
+
+*	Stop a Container
+	docker container stop <container-id>
+
+*	Stop All Docker Container
+	docker container stop $(docker ps -a -q)
+
+*	Remove a Container
+	docker container rm <container-name/id>
+
+*	Remove a Container with FORCE STOP
+	docker container rm -f <container-name/id>
+
+*	Start a Container
+		from image "nginx"
+		with name "webhost"
+		in background or detach mode (-d)
+		on Port Host-80:container-80
+ 	=> docker container run --publish 80:80 --detach --name webhost nginx
+
+*	List of Active docker Container
+	docker container ls
+
+*	List of All docker Container
+	docker container ls -a
+
+*	List all containers (only IDs)
+	docker ps -aq
+
+*	Check the log of a Container
+	docker container logs <container-name/id>
+
+*	Check the process running inside the Container
+	docker container top <container-name/id>
+
+*	Check the metadat about the Container
+	docker container inspect <container-name/id>
+
+*	Check the status of a Container
+	docker container stats <container-name/id>
+
+*	Check the status of All Container
+	docker container stats
+
+* Start a New Container interctively (-it)
+	docker container run -it -p 80:80 --name proxyserver nginx
+	docker container run -it --name myUbuntu ubuntu
+
+* Run an existing Container
+	docker container start -ai <container-name/id>
+	docker container start -ai myUbuntu
+
+* Run addition command on existing Container
+	docker container exec -it
+
+*	Stop all running containers
+	docker container stop $(docker ps -aq)
+
+*	Remove all containers
+	docker container rm $(docker ps -aq)
+
+	Copy From Container 1
+	docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH|-
+	docker cp [OPTIONS] SRC_PATH|- CONTAINER:DEST_PATH
+        docker cp <Container-1>:<File-Path-1> /tmp/tmp.pGlwFknjlF
+
+  docker run -d -p 80:9080 -p 443:9443 \
+  --tmpfs /opt/ibm/wlp/output --tmpfs /logs -v /config \
+  websphere-liberty:javaee7
+
+docker run -p 8080:8080 -p 50000:50000 -v /home/devops/jenkins:/var/jenkins_home jenkins
+
+Docker Images
+=============
+*	List all Docker Images
+	docker images -a
+
+*	List of All docker Container-Images
+	docker image ls
+
+*	History of a docker Container-Images
+	docker image history <Image-name>
+
+*	Details of a docker Container-Images
+	docker image inspect <Image-name>
+
+*	Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+	docker image tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+	docker image tag httpd nigamrout/httpd
+	docker image tag httpd nigamrout/httpd:v0.1
+
+*	Push an image or a repository to a registry
+	docker image push [OPTIONS] NAME[:TAG]
+
+*	Build an image or a repository to a registry
+*	Push an image or a repository to a registry
+	docker image push [OPTIONS] NAME[:TAG]
+
+*	Creating docker image from a 'specified' docker file
+	docker build -f Dockerfile.dev
+	docker build -t <usr-name>/<tag-name> -f <docker-file>
+
+*	Remove specified Docker Images
+	docker rmi <Image>
+
+*	Remove All Docker Images
+	docker rmi $(docker images -a -q)
+
+*	Remove all images
+	docker rmi $(docker images -q)
+
+	docker image build . -t nigamrout/ubuntussh --force-rm
+	docker image build -f ./Dockerfile.SSH -t nigamrout/ubuntu-ssh .
+
+
+Assignment 1:
+------------
+1. Create 3 Containers
+	docker container run -d -p 3306:3306 --name dbserver -e MYSQL_ROOT_PASSWORD=root mysql
+	docker container run -d -p 8080:80 --name webserver httpd
+	docker container run -d -p 80:80 --name proxyhost nginx
+
+2. List All 3 Container
+	docker container ls -a
+
+3. Stop All 3 Container
+	docker container stop dbserver webserver proxyhost
+
+4. Remove All 3 Container
+	docker container rm dbserver webserver proxyhost
+
+
+Docker Network
+===============
+* Show Network
+	docker network ls
+
+* Inspect a Network
+	docker network inspect
+
+* Create a Network
+	docker network create --driver
+
+* Attach a Network to Container
+	docker network connect
+
+* Detach a Network from Container
+	docker network disconnect
+
+* List port mappings or a specific mapping for the container
+	docker port CONTAINER [PRIVATE_PORT[/PROTO]]
+	docker port testserver 22
+
+* IP Address of Docker Container
+	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container_name_or_id>
+
+* IP Address of All Docker Container
+	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -a -q)
+
+* All Docker Container Host Name and IP Address
+	docker ps -q | xargs -n 1 docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} {{ .Name }}' | sed 's/ \// /'
+
+
+Assignment 2:
+-------------
+	Create Networ "dude"
+	docker network create dude
+
+	Create two Container
+	docker container run -d --net dude --net-alias search elasticsearch:2
+	docker container run -d --net dude --net-alias search elasticsearch:2
+
+	docker container run --rm --net dude alpine nslookup search
+
+	docker container run --rm --net dude centos curl -s search:9200
+	docker container run --rm --net dude centos curl -s search:9200
+	docker container run --rm --net dude centos curl -s search:9200
+
+Docker Persistant : Data Volume
+===============================
+
+* To List of volumes
+	docker volume ls
+
+* To Create a docker volumes
+	docker volume create <volume_name>
+	docker volume create myvolume1test
+
+* To inspect a docker volumes
+	docker volume inspect <volume_name>
+	docker volume inspect mysql-db
+
+* To remove a docker volumes
+	docker volume rm <volume_name>
+	docker volume inspect mysql-db
+
+* To remove All Docker Container
+	docker volume rm $(docker volume ls -q)
+
+* To Create a Docker cointener with specified volumes
+	docker container run -d -p 3306:3306 --name dbserver -e MYSQL_ROOT_PASSWORD=root -v mysql-db:/var/lib/mysql mysql
+
+Docker Persistant : Bind Mount
+==============================
+    docker container run -d --name psqldb1 -v psqlvol:/var/lib/postgresql/data postgres:9.6.1
+
+    docker container logs -f psqldb1
+    docker volume inspect psqlvol
+    docker volume ls
+
+    docker container run -d --name psqldb2 -v psqlvol:/var/lib/postgresql/data postgres:9.6.2
+
+Docker-Compose CLI
+==================
+
+* Bring Up docker container from default: docker-compose.yml file
+    docker-compose up
+
+* Running from specified file with -- file or -f option
+    docker-compose --file <file_name> up
+    docker-compose --file ./dc1.yml up
+
+* Bring Down docker container from default: docker-compose.yml file
+    docker-compose down
+
+* Bring Down docker container from specified yml file
+    docker-compose --file ./dc1.yml down
+
+* Bring Down docker container from specified yml file with removing Networks
+    docker-compose --file ./dc1.yml down -v
+
+* Bring Down docker container from specified yml file with removing Networks and images
+    docker-compose --file ./dc1.yml down -v --rmi all
+
+
+
+docker container run -d -it --name jenkins -p 8080:8080 nigamrout/jenkins-ansible bash
+docker container run -d --name artifactory -h artifactory -p 8081:8081 docker.bintray.io/jfrog/artifactory-oss
+
+Artifactory : http://localhost:8081/artifactory/libs-release-local
+
+curl -u admin:admin -X PUT "http://localhost:8081/artifactory/libs-release-local/NigamTestApp1.war" -T /home/nigam/.jenkins/workspace/Project2/NigamTestApp1.war
+
+curl -u admin:admin -X PUT "http://localhost:8081/artifactory/libs-release-local/NigamTestApp1.war" -T NigamTestApp1.war
+
+
+curl -L "http://localhost:8081/artifactory/libs-release-local/NigamTestApp1.war" -o NigamTestApp1.war
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3YepCv7fbBxw8C5Ds+9ZOx8AKxjgyqC5rdQrpm6ijEB6V5TUkqPWlXmhHZnSFfmsO1gQE8lZt837YtUC6gxLinraf0oPsMN8uv3G65nZ3/E6QUGIBELA9yFWbKZ5q/vcz3u5GSsQdU7PoDyfB/yllfPujJon7VCiO68uiwkFM7jMUSJSL25isJa3+Ln9RvS//uUSIKFZbP00TOZrw6gHj1zIhXiyTl6qsjYY/xN9EQfF8x77THi5qmV0v4A9wNoKjnlquAt+Icn++0AgkG8EClv5MfE6QYUHgY907W0LbN40AnIPHItF/cDwsIh9EsghPLwEMfZJplirQ3IyD/t9xUxJNBB/SnZJ83hCev3n5pGI8pqUs8fvpvr/J7fQQocEZ6R4JCtTwqUCLVnW/eDt+giI1P4FDo1gB/7LXTJQMpNw/VyR2SUTePVkyDSfYOO+VGAn7EOtd8+dAGm3oem1QOzRUiZ7y1a1tXVzCmu3ADYeq0gXLiDMbCMWMDMWknEaDo7K/U+F+hw9FzIc+1DvZbbJX1t+QQhx3MaAb8vjz8K1U74rFRsQqB+Ke093mpMNIIO3Qw/kKoMFUeQtRrgrNyzDzn2C583AOzXew92BC4Rb8fRQkclp1ZtmsRXrYmSEhdS1IG3ad82VAWRqEVY8n61xKsllqEvQ9IXDTxLeAMQ== nigam.anand@gmail.com
+
+
+cd
+apt-get update -y
+apt-get install --no-install-recommends -y software-properties-common
+apt-get install openssh-server openssh-client -y
+apt-get install vim -y
+apt-get update -y
+mkdir /var/run/sshd
+chmod 0755 /var/run/sshd
+useradd -m devops
+chmod -R 0700 /home/devops
+echo 'devops:devops123' | chpasswd
+/usr/sbin/sshd -D&
+ps -ef | grep sshd
+su - devops
+bash
+mkdir /home/devops/.ssh
+cd /home/devops/.ssh
+touch authorized_keys
+
+ansible all -i 8ce43138066a, -c docker -m command -a 'uptime'

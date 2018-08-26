@@ -1,0 +1,740 @@
+
+Ansible Lab SetUp
+-----------------
+
+* Local: Adding "devops" user to "docker" group
+  usermod -aG docker devops
+
+* Local: Create Networ "ansinet"
+	docker network create ansinet
+
+* Local: Create volume "ssh-vol"
+  docker volume create ssh-vol
+
+* Local: Create multiple container in "ansinet" network with Ubuntu image
+  docker container run -it -d --name controller  -h controller  --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ansible bash
+  docker container run -it -d --name loadbalance -h loadbalance --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+  docker container run -it -d --name webserver01 -h webserver01 --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+  docker container run -it -d --name webserver02 -h webserver02 --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+  docker container run -it -d --name dbserver01  -h dbserver01  --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+  docker container run -it -d --name dbserver02  -h dbserver02  --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+
+
+* Local: Create multiple container in "ansinet" network with Ubuntu image
+  docker container run -it -d --name controller  -h controller  --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ansible /usr/sbin/sshd -D&
+  docker container run -it -d --name loadbalance -h loadbalance --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+  docker container run -it -d --name webserver01 -h webserver01 --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+  docker container run -it -d --name webserver02 -h webserver02 --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+  docker container run -it -d --name dbserver01  -h dbserver01  --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+  docker container run -it -d --name dbserver02  -h dbserver02  --net ansinet -p 22 -v ssh-vol:/home/devops/.ssh nigamrout/ubuntu-ssh bash
+
+# -------------------------------------------------------------------------------------------------------
+
+* Local: Create multiple container in "ansinet" network with Ubuntu image
+  docker container run -d -it --name webserver01 -h webserver01 --net ansinet ubuntu:16.04 bash
+  docker container run -d -it --name appserver01 -h appserver01 --net ansinet ubuntu:16.04 bash
+  docker container run -d -it --name appserver02 -h appserver02 --net ansinet ubuntu:16.04 bash
+  docker container run -d -it --name appserver03 -h appserver03 --net ansinet ubuntu:16.04 bash
+  docker container run -d -it --name appserver04 -h appserver04 --net ansinet ubuntu:16.04 bash
+  docker container run -d -it --name dbserver01  -h dbserver01  --net ansinet ubuntu:16.04 bash
+  docker container run -d -it --name dbserver02  -h dbserver02  --net ansinet ubuntu:16.04 bash
+ 
+#  docker rm -f webserver01 appserver01 appserver02 appserver03 appserver04 dbserver01 dbserver02
+
+
+* Local: Create multiple container in "ansinet" network with Ubuntu image
+  docker container run -d -it --name webserver11 -h webserver11 --net ansinet centos:7 bash
+  docker container run -d -it --name appserver11 -h appserver11 --net ansinet centos:7 bash
+  docker container run -d -it --name appserver12 -h appserver12 --net ansinet centos:7 bash
+  docker container run -d -it --name appserver13 -h appserver13 --net ansinet centos:7 bash
+  docker container run -d -it --name appserver14 -h appserver14 --net ansinet centos:7 bash
+  docker container run -d -it --name dbserver11  -h dbserver11  --net ansinet centos:7 bash
+  docker container run -d -it --name dbserver12  -h dbserver12  --net ansinet centos:7 bash
+ 
+#  docker rm -f webserver11 appserver11 appserver12 appserver13 appserver14 dbserver11 dbserver12
+
+# -------------------------------------------------------------------------------------------------------
+
+  docker container run -d -it --name webserver01 -h webserver01 ubuntu:16.04 bash
+  docker container run -d -it --name appserver01 -h appserver01 ubuntu:16.04 bash
+  docker container run -d -it --name appserver02 -h appserver02 ubuntu:16.04 bash
+  docker container run -d -it --name appserver03 -h appserver03 ubuntu:16.04 bash
+  docker container run -d -it --name appserver04 -h appserver04 ubuntu:16.04 bash
+  docker container run -d -it --name dbserver01  -h dbserver01  ubuntu:16.04 bash
+  docker container run -d -it --name dbserver02  -h dbserver02  ubuntu:16.04 bash
+
+  docker container run -d -it --name webserver11 -h webserver11 centos:7 bash
+  docker container run -d -it --name appserver11 -h appserver11 centos:7 bash
+  docker container run -d -it --name appserver12 -h appserver12 centos:7 bash
+  docker container run -d -it --name appserver13 -h appserver13 centos:7 bash
+  docker container run -d -it --name appserver14 -h appserver14 centos:7 bash
+  docker container run -d -it --name dbserver11  -h dbserver11  centos:7 bash
+  docker container run -d -it --name dbserver12  -h dbserver12  centos:7 bash
+ 
+docker rm -f webserver11 appserver11 appserver12 appserver13 appserver14 dbserver11 dbserver12 \
+             webserver01 appserver01 appserver02 appserver03 appserver04 dbserver01 dbserver02
+
+
+* [nigam@localhost ~]$ docker exec -it controller bash
+  root@controller:/# su - devops
+
+* Generate the ssh key in "controller" container
+  ==> ssh-keygen -t rsa -f /home/devops/.ssh/id_rsa -P ""
+* Copy the content of /home/devops.ssh/id_rsa.pub and add it to /home/devops.ssh/authorized_keys
+* Make sure /home/devops.ssh/authorized_keys have one line
+  ==> devops@controller:~/.ssh$ wc -l authorized_keys
+      1 authorized_keys
+
+* devops@controller:~$ ssh devops@loadbalance
+  Welcome to Ubuntu 16.04.4 LTS (GNU/Linux 3.10.0-693.21.1.el7.x86_64 x86_64)
+
+   * Documentation:  https://help.ubuntu.com
+   * Management:     https://landscape.canonical.com
+   * Support:        https://ubuntu.com/advantage
+  Last login: Sun May  6 17:44:20 2018 from 172.18.0.2
+  $
+  $ bash
+  devops@loadbalance:~$
+  $
+  Connection to loadbalance closed.
+
+* devops@controller:~$ ansible --list-hosts all
+   [WARNING]: provided hosts list is empty, only localhost is available. Note
+  that the implicit localhost does not match 'all'
+
+    hosts (0):
+
+* devops@controller:~$ pwd
+  /home/devops
+
+* devops@controller:~$ ls -lrt
+  total 4
+  -rw-rw-r--. 1 devops devops 179 May  6 19:57 devHost
+
+* devops@controller:~$ ls -lrt
+total 4
+-rw-rw-r--. 1 devops devops 179 May  6 19:57 devHost
+
+* devops@controller:~$ cat /home/devops/devHost
+  [groupAllHost]
+  dbserver02
+  dbserver01
+  webserver02
+  webserver01
+  loadbalance
+  controller ansible_connection=local
+
+  [groupDB]
+  dbserver02
+  dbserver01
+
+  [groupWEB]
+  webserver02
+  webserver01
+
+* devops@controller:~$ ansible -i devHost --list-hosts all
+  hosts (6):
+    dbserver02
+    dbserver01
+    webserver02
+    webserver01
+    loadbalance
+    controller
+devops@controller:~$
+
+* devops@controller:~$ ansible -i devHost --list-hosts groupAllHost
+  hosts (6):
+    dbserver02
+    dbserver01
+    webserver02
+    webserver01
+    loadbalance
+    controller
+devops@controller:~$
+
+* devops@controller:~$ ansible -i devHost --list-hosts groupWEB
+  hosts (2):
+    webserver02
+    webserver01
+devops@controller:~$
+
+* devops@controller:~$ ansible -i devHost --list-hosts groupDB
+  hosts (2):
+    dbserver02
+    dbserver01
+devops@controller:~$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------
+
+  docker exec -it loadbalance bash
+  docker exec -it webserver01 bash
+  docker exec -it webserver02 bash
+  docker exec -it dbserver01 bash
+  docker exec -it dbserver02 bash
+
+
+
+	=> Docker Container All host IP Addres
+	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
+
+	=> Docker Container All host Name
+	docker inspect -f '{{.Name}} - {{.NetworkSettings.IPAddress }}' $(docker ps -aq)
+
+	=> Docker Container All host Name and IP Addres
+	docker inspect -f '{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
+
+	=> docker container run -d -it --name sshserver --net ansinet -p 22 ubuntussh
+
+ps -ef | grep ssh
+/usr/sbin/sshd -D&
+ps -ef | grep ssh
+
+
+* Adding host name to ansible Host file
+	echo 'controlserver' >> /etc/ansible/hosts
+	echo 'loadbalancer' >> /etc/ansible/hosts
+	echo 'webserver01' >> /etc/ansible/hosts
+	echo 'webserver02' >> /etc/ansible/hosts
+	echo 'dbserver01' >> /etc/ansible/hosts
+	echo 'dbserver02' >> /etc/ansible/hosts
+
+* Stopping list of container
+	docker container stop controlserver
+	docker container stop loadbalancer
+	docker container stop webserver01
+	docker container stop webserver02
+	docker container stop dbserver01
+	docker container stop dbserver02
+	or
+	docker container stop $(docker ps -aq)
+
+* Removing list of container
+	docker container rm -f controlserver
+	docker container rm -f loadbalancer
+	docker container rm -f webserver01
+	docker container rm -f webserver02
+	docker container rm -f dbserver01
+	docker container rm -f dbserver02
+	or
+	docker container rm $(docker ps -aq)
+
+
+* Remove Docker all Network "ansinet"
+	docker network rm $(docker network ls -q)
+
+* To Current Open Port
+	netstat -tulpn
+
+* Install open SSH-Server
+	sudo apt-get install openssh-server
+
+
+
+  devops@controller:~$ ansible -i devHost -m ping all
+  loadbalance | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  webserver01 | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  dbserver01 | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  dbserver02 | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  webserver02 | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  controller | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  devops@controller:~$
+  devops@controller:~$
+  devops@controller:~$ ansible -i devHost -m ping groupWEB
+  webserver01 | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  webserver02 | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  devops@controller:~$ ansible -i devHost -m ping groupDB
+  dbserver02 | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  dbserver01 | SUCCESS => {
+      "changed": false,
+      "ping": "pong"
+  }
+  devops@controller:~$
+  devops@controller:~$ ansible -i devHost -m ping groupDB
+
+
+
+
+SSH SetUp
+==========
+docker container run -it -d --name client --net ansinet -p 22 ubuntu bash
+docker exec -it client bash
+
+Container root:
+...............
+useradd -m devops
+passwd devops - devops123
+mkdir /home/devops
+chown -R devops:devops /home/devops
+apt-get update
+apt-get install --no-install-recommends -y software-properties-common
+apt-get install openssh-server openssh-client -y
+eval "$(ssh-agent -s)"
+apt-get update
+
+mkdir /var/run/sshd
+chmod 0755 /var/run/sshd
+
+/usr/sbin/sshd -D&
+
+devops:
+ssh-keygen -t rsa
+ssh-keygen -t rsa -f /home/devops/.ssh/id_rsa -P ""
+
+cd /home/devops/.ssh
+touch authorized_keys
+
+--------------------------------------------------
+provision.yml
+- hosts: my_app
+  sudo: yes
+  remote_user: root
+  gather_facts: no
+  pre_tasks:
+    - name: 'install python2'
+      raw: sudo apt-get -y install python-simplejson
+  tasks:
+    - name: 'ensure user {{ project_name }} exists'
+      user: name={{ project_name }} state=present
+-----------------------------------------------------------
+devHost File:
+
+echo "" >> devHost
+echo "[groupAllHost]" >> devHost
+echo "dbserver02" >> devHost
+echo "dbserver01" >> devHost
+echo "webserver02" >> devHost
+echo "webserver01" >> devHost
+echo "loadbalance" >> devHost
+echo "controller ansible_connection=local" >> devHost
+
+echo "" >> /etc/ansible/devHost
+echo "[groupAllIP]" >> /etc/ansible/devHost
+echo "172.18.0.7" >> /etc/ansible/devHost
+echo "172.18.0.6" >> /etc/ansible/devHost
+echo "172.18.0.5" >> /etc/ansible/devHost
+echo "172.18.0.4" >> /etc/ansible/devHost
+echo "172.18.0.3" >> /etc/ansible/devHost
+echo "172.18.0.2 ansible_connection=local" >> /etc/ansible/devHost
+
+echo "" >> devHost
+echo "[groupDB]" >> devHost
+echo "dbserver02" >> devHost
+echo "dbserver01" >> devHost
+
+echo "" >> devHost
+echo "[groupWEB]" >> devHost
+echo "webserver02" >> devHost
+echo "webserver01" >> devHost
+
+------------------------------------------------------------------------
+
+
+
+
+* 01. ansible --list-hosts all
+[nigam@localhost Nigam_Ansible]$ ansible --list-hosts all
+ [WARNING]: provided hosts list is empty, only localhost is available. Note
+that the implicit localhost does not match 'all'
+
+  hosts (0):
+[nigam@localhost Nigam_Ansible]$
+
+
+
+* 02. ansible -i <host-file-name> --list-hosts all
+	ansible -i dev --list-hosts all
+
+[nigam@localhost Nigam_Ansible]$ ansible -i dev --list-hosts all
+  hosts (5):
+    control
+    db01
+    app01
+    app02
+    lb01
+[nigam@localhost Nigam_Ansible]$
+[nigam@localhost Nigam_Ansible]$
+
+
+* 03 [nigam@localhost Nigam_Ansible]$ ansible -i dev --list-hosts "*"
+  hosts (5):
+    control
+    db01
+    app01
+    app02
+    lb01
+[nigam@localhost Nigam_Ansible]$
+
+
+* 05 [nigam@localhost Nigam_Ansible]$ ansible --list-hosts loadbalancer
+  hosts (1):
+    lb01
+[nigam@localhost Nigam_Ansible]$
+[nigam@localhost Nigam_Ansible]$ ansible --list-hosts webserver
+  hosts (2):
+    app01
+    app02
+[nigam@localhost Nigam_Ansible]$
+[nigam@localhost Nigam_Ansible]$ ansible --list-hosts database
+  hosts (1):
+    db01
+[nigam@localhost Nigam_Ansible]$
+[nigam@localhost Nigam_Ansible]$
+
+* 06. [nigam@localhost Nigam_Ansible]$ ansible --list-hosts database,loadbalancer
+  hosts (2):
+    db01
+    lb01
+[nigam@localhost Nigam_Ansible]$
+[nigam@localhost Nigam_Ansible]$ ansible --list-hosts webserver,database
+  hosts (3):
+    app01
+    app02
+    db01
+[nigam@localhost Nigam_Ansible]$
+
+* 07. [nigam@localhost Nigam_Ansible]$ ansible --list-hosts webserver[0]
+  hosts (1):
+    app01
+[nigam@localhost Nigam_Ansible]$
+[nigam@localhost Nigam_Ansible]$ ansible --list-hosts \!loadbalancer
+  hosts (4):
+    db01
+    control
+    app01
+    app02
+[nigam@localhost Nigam_Ansible]$
+[nigam@localhost Nigam_Ansible]$
+
+
+
+
+* [nigam@localhost Nigam_Ansible]$ ansible -m ping all
+control | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+db01 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ssh: connect to host db01 port 22: Connection timed out\r\n",
+    "unreachable": true
+}
+app02 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ssh: connect to host app02 port 22: Connection timed out\r\n",
+    "unreachable": true
+}
+lb01 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ssh: connect to host lb01 port 22: Connection timed out\r\n",
+    "unreachable": true
+}
+app01 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ssh: connect to host app01 port 22: Connection timed out\r\n",
+    "unreachable": true
+}
+[nigam@localhost Nigam_Ansible]$
+[nigam@localhost Nigam_Ansible]$
+
+======================
+
+
+ansible -i devHost --list-hosts all
+ansible -i devHost --list-hosts group1
+ansible -i devHost --list-hosts \!group2
+
+cat /etc/ansible/ansible.cfg
+
+ansible -i devHost -m ping all
+
+ansible -i devHost -m ping all
+ansible -i devHost --user=devops devops -m ping all
+ansible -i devHost -U devops -m ping all
+
+ansible -i devHost -e 'ansible_python_interpreter=/usr/bin/python3' -m ping all
+
+ansible -i devHost -U devops -m ping all
+
+Linking / Symbelic Link
+* ==>  ln -s python3.5 python
+
+
+## ===========================================================================
+
+
+[nigam@localhost Nigam_Ansible]$ pwd
+/home/nigam/Nigam_DevOps/Nigam_Ansible
+[nigam@localhost Nigam_Ansible]$ 
+[nigam@localhost Nigam_Ansible]$ ansible -i devHost all -m "ping"
+webserver02 | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+dbserver01 | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+loadbalance | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+webserver01 | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+dbserver02 | SUCCESS => {
+    "changed": false, 
+    "ping": "pong"
+}
+[nigam@localhost Nigam_Ansible]$ 
+[nigam@localhost Nigam_Ansible]$ 
+
+[nigam@localhost ansible1]$ 
+[nigam@localhost ansible1]$ ansible-playbook playbooks/hostname.yml
+
+PLAY [all] *****************************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] *****************************************************************************************************************************************************************************************
+ok: [webserver01]
+ok: [webserver02]
+ok: [loadbalance]
+ok: [dbserver01]
+ok: [dbserver02]
+
+TASK [get server hostname] *************************************************************************************************************************************************************************************
+changed: [loadbalance]
+changed: [webserver01]
+changed: [dbserver01]
+changed: [dbserver02]
+changed: [webserver02]
+
+PLAY RECAP *****************************************************************************************************************************************************************************************************
+dbserver01                 : ok=2    changed=1    unreachable=0    failed=0   
+dbserver02                 : ok=2    changed=1    unreachable=0    failed=0   
+loadbalance                : ok=2    changed=1    unreachable=0    failed=0   
+webserver01                : ok=2    changed=1    unreachable=0    failed=0   
+webserver02                : ok=2    changed=1    unreachable=0    failed=0   
+
+[nigam@localhost ansible1]$ ansible-playbook database.yml 
+
+PLAY [server_db] *****************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************************************************************************************************
+ok: [dbserver02]
+ok: [dbserver01]
+
+TASK [install mysql-server] ******************************************************************************************************************************************************************************
+changed: [dbserver01]
+changed: [dbserver02]
+
+PLAY RECAP ***********************************************************************************************************************************************************************************************
+dbserver01                 : ok=2    changed=1    unreachable=0    failed=0   
+dbserver02                 : ok=2    changed=1    unreachable=0    failed=0   
+
+# =============================================================================
+[nigam@localhost ansible1]$
+[nigam@localhost Nigam_Ansible]$ 
+[nigam@localhost Nigam_Ansible]$ ansible -i devHost --list-hosts all
+  hosts (15):
+    dbserver01
+    dbserver02
+    dbserver11
+    dbserver12
+    localhost
+    webserver11
+    appserver11
+    appserver12
+    appserver13
+    appserver14
+    appserver01
+    appserver02
+    appserver03
+    appserver04
+    webserver01
+[nigam@localhost Nigam_Ansible]$ ansible -i devHost --list-hosts server_web
+  hosts (2):
+    webserver01
+    webserver11
+[nigam@localhost Nigam_Ansible]$ 
+[nigam@localhost Nigam_Ansible]$ ansible -i devHost --list-hosts server_db
+  hosts (4):
+    dbserver01
+    dbserver02
+    dbserver11
+    dbserver12
+[nigam@localhost Nigam_Ansible]$ 
+[nigam@localhost Nigam_Ansible]$ 
+[nigam@localhost Nigam_Ansible]$ ansible -i devHost --list-hosts server_app
+  hosts (8):
+    appserver01
+    appserver02
+    appserver03
+    appserver04
+    appserver11
+    appserver12
+    appserver13
+    appserver14
+[nigam@localhost Nigam_Ansible]$ 
+[nigam@localhost Nigam_Ansible]$ 
+[nigam@localhost Nigam_Ansible]$ ansible -i devHost --list-hosts ubuntu
+  hosts (7):
+    webserver01
+    appserver01
+    appserver02
+    appserver03
+    appserver04
+    dbserver01
+    dbserver02
+[nigam@localhost Nigam_Ansible]$ ansible -i devHost --list-hosts centos
+  hosts (7):
+    webserver11
+    appserver11
+    appserver12
+    appserver13
+    appserver14
+    dbserver11
+    dbserver12
+[nigam@localhost Nigam_Ansible]$ 
+[nigam@localhost Nigam_Ansible]$ 
+
+# =============================================================================
+
+* ansible-playbook Nigam_Ansible_PlayBook_01-HostName.yml 
+* ansible-playbook -i devHost Nigam_Ansible_PlayBook_01-HostName.yml 
+
+[nigam@localhost Nigam_Ansible]$ ansible-playbook -i devHost Nigam_Ansible_PlayBook_01-HostName.yml 
+
+PLAY [all] **************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************************************************
+ok: [appserver12]
+ok: [appserver11]
+ok: [appserver13]
+ok: [webserver11]
+ok: [appserver14]
+ok: [localhost]
+ok: [dbserver11]
+ok: [dbserver12]
+
+TASK [Install git client] ***********************************************************************************************************************************************************************
+changed: [appserver12]
+changed: [appserver14]
+changed: [appserver11]
+changed: [webserver11]
+changed: [appserver13]
+changed: [localhost]
+changed: [dbserver11]
+changed: [dbserver12]
+
+PLAY RECAP **************************************************************************************************************************************************************************************
+appserver11                : ok=2    changed=1    unreachable=0    failed=0   
+appserver12                : ok=2    changed=1    unreachable=0    failed=0   
+appserver13                : ok=2    changed=1    unreachable=0    failed=0   
+appserver14                : ok=2    changed=1    unreachable=0    failed=0   
+dbserver11                 : ok=2    changed=1    unreachable=0    failed=0   
+dbserver12                 : ok=2    changed=1    unreachable=0    failed=0   
+localhost                  : ok=2    changed=1    unreachable=0    failed=0   
+webserver11                : ok=2    changed=1    unreachable=0    failed=0   
+
+[nigam@localhost Nigam_Ansible]$ ansible-playbook Nigam_Ansible_PlayBook_01-HostName.yml 
+
+PLAY [all] **************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************************************************
+ok: [dbserver11]
+ok: [appserver12]
+ok: [webserver11]
+ok: [appserver11]
+ok: [dbserver12]
+ok: [localhost]
+ok: [appserver13]
+ok: [appserver14]
+
+TASK [Install git client] ***********************************************************************************************************************************************************************
+changed: [dbserver11]
+changed: [appserver12]
+changed: [appserver11]
+changed: [dbserver12]
+changed: [webserver11]
+changed: [localhost]
+changed: [appserver13]
+changed: [appserver14]
+
+PLAY RECAP **************************************************************************************************************************************************************************************
+appserver11                : ok=2    changed=1    unreachable=0    failed=0   
+appserver12                : ok=2    changed=1    unreachable=0    failed=0   
+appserver13                : ok=2    changed=1    unreachable=0    failed=0   
+appserver14                : ok=2    changed=1    unreachable=0    failed=0   
+dbserver11                 : ok=2    changed=1    unreachable=0    failed=0   
+dbserver12                 : ok=2    changed=1    unreachable=0    failed=0   
+localhost                  : ok=2    changed=1    unreachable=0    failed=0   
+webserver11                : ok=2    changed=1    unreachable=0    failed=0   
+
+[nigam@localhost Nigam_Ansible]$ 
+
+# =============================================================================
+
+
+
+
+docker exec webserver01 apt-get update
+docker exec webserver01 apt-get install -y software-properties-common
+docker exec appserver01 apt-get update
+docker exec appserver01 apt-get install -y software-properties-common
+docker exec appserver02 apt-get update
+docker exec appserver02 apt-get install -y software-properties-common
+docker exec dbserver01 apt-get update
+docker exec dbserver01 apt-get install -y software-properties-common
+docker exec dbserver02 apt-get update
+docker exec dbserver02 apt-get install -y software-properties-common
+

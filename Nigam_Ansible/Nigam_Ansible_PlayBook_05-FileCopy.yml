@@ -1,0 +1,15 @@
+---
+- hosts: app_server
+#  become: yes
+#  become_user: root
+#  remote_user: devops
+
+  tasks:
+    - name: Copy a file from Controller Machine to other servers
+      copy:
+        src: /home/nigam/.jenkins/workspace/Project3_CD/NigamTestApp1.war
+        dest: /usr/local/tomcat/webapps/NigamTestApp1.war
+#        owner: devops
+#        mode: 0660
+      register: rsult
+      ignore_errors: yes

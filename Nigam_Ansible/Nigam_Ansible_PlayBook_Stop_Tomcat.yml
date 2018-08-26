@@ -1,0 +1,27 @@
+---
+
+- name: Set tomcat file permissions
+  file: path=/opt/apache-tomcat-{{ tomcat_version }} owner={{ tomcat_user }}
+    group=tomcat recurse=yes
+  tags:
+    - tomcat
+
+- name: Configure Tomcat server
+  template: src=server.xml.{{ tomcat_version|first() }} dest={{ catalina_home }}/conf/server.xml backup=yes
+  tags:
+    - tomcat
+
+- name: Configure Tomcat users
+  template: src=tomcat-users.xml dest={{ catalina_home }}/conf/
+  tags:
+    - tomcat
+
+- name: Start tomcat service
+  shell: /etc/init.d/tomcat start
+  tags:
+    - tomcat
+
+- name: wait for tomcat to start
+  wait_for: port={{ http_port }} timeout=60
+  tags:
+    - tomcat

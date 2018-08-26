@@ -1,0 +1,170 @@
+# To Bring up the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> up -d
+# docker-compose -f Docker-compose.Ansible.Lab.SetUp.yml up -d
+
+# To Bring down the container mentioned in this yml file
+# docker-compose -f <Docker-Compose-File-Name> down
+# docker-compose -f Docker-compose.Ansible.Lab.SetUp.yml down
+
+
+version: "3.2"
+#ARG buildno
+#RUN echo "Build number: $buildno"
+# ========================================================================================
+services:
+  webserver01:
+    image: ubuntu
+    hostname: webserver01
+    container_name: webserver01
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+#    entrypoint: apt-get update && apt-get install -y software-properties-common 
+#    command: apt-get update && apt-get install -y software-properties-common 
+    command: ["/bin/bash"]
+ 
+    
+
+  appserver01:
+    image: ubuntu
+    hostname: appserver01
+    container_name: appserver01
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+#    command: apt-get update && apt-get install -y software-properties-common 
+    command: ["/bin/bash"]
+
+  appserver02:
+    image: ubuntu
+    hostname: appserver02
+    container_name: appserver02
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+#    command: apt-get update && apt-get install -y software-properties-common 
+    command: ["/bin/bash"]
+    
+#  appserver03:
+#    image: ubuntu
+#    hostname: appserver03
+#    container_name: appserver03
+#    environment:
+#      TZ: America/New_York
+#    stdin_open: true
+#    tty: true
+##    command: apt-get update && apt-get install -y software-properties-common 
+#    command: ["/bin/bash"]
+    
+#  appserver04:
+    image: ubuntu
+    hostname: appserver04
+    container_name: appserver04
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+#    command: apt-get update && apt-get install -y software-properties-common 
+#    command: ["/bin/bash"]
+    
+#  dbserver01:
+#    image: ubuntu
+#    hostname: dbserver01
+#    container_name: dbserver01
+#    environment:
+#      TZ: America/New_York
+#    stdin_open: true
+#    tty: true
+# #    command: apt-get update && apt-get install -y software-properties-common 
+#    command: ["/bin/bash"]
+    
+  dbserver02:
+    image: ubuntu
+    hostname: dbserver02
+    container_name: dbserver02
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+#    command: apt-get update && apt-get install -y software-properties-common 
+    command: ["/bin/bash"]
+    
+
+# docker rm -f webserver01 appserver01 appserver02 appserver03 appserver04 dbserver01 dbserver02
+
+
+  webserver11:
+    image: centos:7
+    hostname: webserver11
+    container_name: webserver11
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    
+  appserver11:
+    image: centos:7
+    hostname: appserver11
+    container_name: appserver11
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    
+  appserver12:
+    image: centos:7
+    hostname: appserver12
+    container_name: appserver12
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    
+  appserver13:
+    image: centos:7
+    hostname: appserver13
+    container_name: appserver13
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    
+  appserver14:
+    image: centos:7
+    hostname: appserver14
+    container_name: appserver14
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    
+  dbserver11:
+    image: centos:7
+    hostname: dbserver11
+    container_name: dbserver11
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    
+  dbserver12:
+    image: centos:7
+    hostname: dbserver12
+    container_name: dbserver12
+    environment:
+      TZ: America/New_York
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
+    
+
+# docker rm -f webserver11 appserver11 appserver12 appserver13 appserver14 dbserver11 dbserver12

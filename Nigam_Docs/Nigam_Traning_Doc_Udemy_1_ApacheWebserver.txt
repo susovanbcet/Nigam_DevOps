@@ -1,0 +1,217 @@
+
+
+
+
+* Apache Webserver files
+ /usr/sbin/httpd:	Server binary
+ /etc/httpd:	Server Configuration files
+ /etc/httpd/conf:	Main configuration files
+ /etc/httpd/conf.d:	Configuration files for individually packaged modules, like ssl, php, perl, etc
+ /etc/httpd/logs:	Symbolic link to /var/log/httpd
+ /etc/httpd/modules:	Symbolic link to /usr/lib/httpd/modules
+ /etc/httpd/run:	Symbolic link to /var/run
+ /usr/lib/httpd/modules:	Server Modules
+ /var/log/httpd:	Server log
+ /var/run:	Runtime variables
+ /var/run/httpd.pid:	Server process Id
+ /var/www/html:	public HTML files
+
+* rpm -q httpd
+
+* Main Configuration file /etc/httpd/conf/httpd.conf
+
+ # ServerRoot: Server related configuration file related to Apache web Server
+  Default value is: /etc/httpd
+ ServerRoot "/etc/httpd"
+
+ # PidFile: Process id for httpd
+  Default location for PidFile is: run/httpd.pid (relative to ServerRoot)
+  Default location for PidFile is: <ServerRoot>/run/httpd.pid
+  Default location for PidFile is: /etc/httpd/run/httpd.pid
+ PidFile run/httpd.pid
+
+ # ServerName: To declare the name of your website
+ ServerName www.nigam.com:80
+
+ # DocumentRoot: Specify where is the document (html, images) files are 
+  Default value is: /var/www/html
+ DocumentRoot "/var/www/html"
+
+ # ErrorLog: Specifys where all Server logs are located
+  Default location for Errorlog is: logs/error_log (relative to ServerRoot)
+  Default location for Errorlog is: <ServerRoot>/logs/error_log
+  Default location for Errorlog is: /etc/httpd/logs/error_log
+  Note: /etc/httpd/logs is symbolic link to /var/log/httpd
+ ErrorLog logs/error_log
+
+ # LogLevel: To specify the log level (debug, info, notice, warn, error, crit, alert, amerg). 
+  Default value for LogLevel is: warn	
+ LogLevel warn
+
+ # LogFormat:
+
+ # Listen: To Specify, what port to use for icomming request/connection to webServer
+  Default value for Listen is: 80 (For non-sescured connection)
+  Default value for Listen is: 443 (For sescured connection)
+ Listen 80
+
+ # StartServers: To Specify No of Process to lunch on startup
+  Default value for StartServers is: 8
+
+ # MinSpareServers: To Specify Min No of Process 
+ # MaxSpareServers: To Specify Max No of Process
+
+
+ # Order
+  Order deny,allow
+  Deny from all
+  Allow from IP1, IP2
+
+ # Directory
+  <Directory "/var/www/html">
+   Options Indexes FollowSymLinks
+   Order deny,allow
+   Deny from all
+   Allow from IP1, IP2
+  </Directory>
+
+ # Indexes: Used listing your directory
+  <Directory "/var/www/html/index_allow">
+   Options Indexes 
+  </Directory>
+  <Directory "/var/www/html/index_deny">
+  </Directory>
+
+ # For file level permission
+  <Files ".ht*">
+    Require all denied
+  </Files>
+
+* Configure the /etc/hosts file, so that you cn access the website by name
+ IP NameofServer
+ IP websiteName
+
+* Start the Apache Web Server
+ Start the Apache httpd service:
+  service https start OR systemctl start httpd (based on OS version)
+ Enable the Apache httpd service:
+  Chkconfig httpd on OR systemctl enable httpd (based on OS version)
+ Check the Apache httpd Status:
+  service https status OR systemctl status httpd
+ Restart the Apache httpd service:
+  service https restart OR systemctl restart httpd (based on OS version)
+
+
+* Install Apache
+ yum install httpd
+
+* To verfy the package
+ rpm -q <NameOfPackage>
+ rpm -q httpd
+
+* To Access a webpage in Linux 
+ elinks www.nigam.com
+
+* Virtual Hosts
+ Virtual Hosts feature allows to run several websites from a single computer. 
+ Virtual Hosts can be IP-based or Named-based
+  <VirtualHost *:80>
+    DocumentRoot /var/www/html/nigam-Middleware
+    ServerName www.nigam-Middleware.com
+    # Other directives
+  </VirtualHost>
+
+  <VirtualHost 192.168.1.20:80>
+    # directives
+  </VirtualHost>
+
+  <VirtualHost edu.nigam.com>
+    # directives
+  </VirtualHost>
+
+  <VirtualHost nigam.com:8707>
+    # directives
+  </VirtualHost>
+
+* Virtual Hosts: Hosting two website from a single computer
+  <VirtualHost 192.168.1.40:80>
+    DocumentRoot /var/www/html/nigam
+    ServerName www.nigam.com
+  </VirtualHost>
+
+  <VirtualHost 192.168.1.40:80>
+    DocumentRoot /var/www/html/anand
+    ServerName www.anand.com
+  </VirtualHost>
+
+
+
+* Virtual Hosts: Hosting two different website (internet and intranet) content for single website name (www.our-company.com)
+  NameVirtualHost 172.16.1.1:80
+  <VirtualHost 172.16.1.1:80>
+    DocumentRoot /www/intranet
+    ServerName www.our-company.com
+    <Directory /www/intranet>
+       Options Indexes FollowSymLinks
+    </Directory>
+  </VirtualHost>
+
+  NameVirtualHost 211.211.211.211:80
+  <VirtualHost 211.211.211.211:80>
+    DocumentRoot /www/web
+    ServerName www.our-company.com
+    <Directory /www/web>
+       Options +ExecCGI FollowSymLinks
+    </Directory>
+  </VirtualHost>
+
+
+* Virtual Hosts: Hosting two different website on two different port on single server
+
+  Listen 192.168.1.128:80
+  Listen 192.168.1.128:9021
+
+  NameVirtualHost 192.168.1.128:80
+  <VirtualHost 192.168.1.128:80>
+    DocumentRoot /www/white-socks
+    ServerName www.white-socks.com
+  </VirtualHost>
+
+  NameVirtualHost 192.168.1.128:9021
+  <VirtualHost 192.168.1.128:9021>
+    DocumentRoot /www/black-socks
+    ServerName www.black-socks.com
+  </VirtualHost>
+
+
+* Modules: Are extensions that enhance the basic functionality of the WebServer
+
+* Modules: Types of Apache Modules
+ Building / Static Module 
+ Loadable / Shared Modules
+
+* Modules: List of Apache modules
+ List of Static / Compiled Modules
+  httpd -l
+ list of All Modules (Static & Share)
+  httpd -M
+
+* Modules: Location of Modules
+ /etc/httpd/modules/ (This is Symbolik Link to /usr/lib64/httpd/modules)
+
+
+* Apache Directory level Configuration File ==> .htaccess
+ # .htaccess --> hypertext access
+ # Default name for the Apache directory-level configuration file
+ # This can be used to create security restrictions for particular directories
+ # Most common uses is to require user authentication in order to serve certain webpage. 
+ # Should not use .httpaccess to handle secure or privileged content, like user data. 
+ # .htaccess file is loaded everytime a webpage is required, including a performance loss
+ # cat .htaccess
+  AuthType Basic
+  AuthName "Restricted web page"
+  AuthUserFile /etc/httpd/conf/.htapasswd"
+  require valid-user
+ # To create .htpasswd file
+  htpasswd -c <password-File-Name> <any-valid-user>
+  htpasswd -c /etc/httpd/conf/.htapasswd john

@@ -1,0 +1,46 @@
+*00 Install Atom Text Editor
+	sudo yum install wget git -y
+	wget https://github.com/atom/atom/releases/download/v1.18.0/atom.x86_64.rpm
+	sudo yum localinstall atom.x86_64.rpm -y
+
+*01. List of all host namne in the default inventory host file
+	ansible --list-hosts all
+
+*02. "-i" to provide the inventory file
+	ansible -i <host-file-name> --list-hosts all
+  ansible -i dev --list-hosts all
+	or
+	ansible -i <host-file-name> --list-hosts "*"
+	ansible -i dev --list-hosts "*"
+
+*03. Changethe ansible config file to st the default inventory file.
+	vi /etc/ansible/ansible.cfg
+	[defaults]
+	inventory = /home/nigam/Nigam_Ansible/dev
+
+*04 List of all host namne in the default inventory host file
+	ansible --list-hosts <group-name>,<additional-group-name>
+	ansible --list-hosts webserver
+	ansible --list-hosts webserver,database
+	ansible --list-hosts webserver[0]
+	ansible --list-hosts \!controler
+
+*05 Ping all the host in the inventory file
+	ansible -m ping all
+
+*06 Get all the host name of all server in inventory list
+	ansible -m command -a "hostname"  all
+
+========================================================
+
+ansible-playbook -i devHost -l loadbalance Nigam_PlayBook_Test1.yml
+
+* ansible -i devHost --list-hosts all
+* ansible -m ping all
+* ansible -m command -a "hostname" all
+* ansible -a "/bin/false" all
+* ansible -m setup webserver01
+* ansible webserver01 -vvv -m ping
+
+ansible-playbook Nigam_Ansible_PlayBook_01-HostName.yml 
+ansible-playbook -i devHost Nigam_Ansible_PlayBook_01-HostName.yml 

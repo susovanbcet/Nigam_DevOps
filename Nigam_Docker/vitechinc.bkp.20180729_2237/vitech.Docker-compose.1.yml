@@ -1,0 +1,44 @@
+
+version: "3.2"
+#ARG buildno
+#RUN echo "Build number: $buildno"
+# ========================================================================================
+services:
+  webserver:
+    #image: httpd:2.4
+    build:
+      context: .
+      dockerfile: vitech.Apache.Dockerfile 
+      args:
+        buildno: 1
+    image: vitech/apache
+    hostname: vitech_webserver
+    container_name: vitech_webserver
+    ports:
+      - "80:80"
+    environment:
+      TZ: America/New_York
+    depends_on:
+      - appserver
+#    volumes:
+#      - ${PWD}/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - appserver:server1
+
+# ---------------------------------------------------------------------------------------
+
+  appserver:
+    #image: tomcat:8.5.32
+    build:
+      context: .
+      dockerfile: vitech.Tomcat.Dockerfile
+      args:
+        buildno: 1
+    image: vitech/tomcat
+    hostname: vitech_appserver
+    container_name: vitech_appserver
+    environment:
+      TZ: America/New_York
+#    volumes:
+#      - ${PWD}/index_Tomcat_8.5.31.jsp:/usr/local/tomcat/webapps/ROOT/index.jsp
+

@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  remote_user: devops
+
+  tasks:
+    - name: Creates destination directory
+      file:
+        state: directory
+        mode: 0700
+        dest: /home/devops/newdbDir
+
+    - name: Copy a file from Controller Machine to other servers
+      copy:
+        src: ~/testFile
+        dest: /home/devops/newdbDir/testFileNe
+        owner: devops
+        mode: 0660
+      #register: rsa
+      ignore_errors: yes
+
+    - name: Checking Python version
+      command: python --version > NigamAnsibleExecution.log
+      register: pythonVersion
+      ignore_errors: yes

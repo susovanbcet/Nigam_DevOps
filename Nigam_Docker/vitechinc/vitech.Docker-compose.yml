@@ -1,0 +1,44 @@
+# docker-compose -f vitech.Docker-compose.yml up -d
+
+version: "3.2"
+
+services:
+  webserver:
+    #image: httpd:2.4
+    build:
+      context: .
+      dockerfile: vitech.Apache.Dockerfile 
+    image: vitech/apache_dc
+    hostname: vitechApache_dc
+    container_name: vitechApache_dc
+    ports:
+      - "80:80"
+    environment:
+      TZ: America/New_York
+    depends_on:
+      - appserver
+    volumes:
+      - dcv_tomcatlogs:/usr/local/tomcat/logs
+      - dcv_tomcatapps:/usr/local/tomcat/webapps/ROOT
+    links:
+      - appserver:vitechTomcat
+
+  appserver:
+    #image: tomcat:8.5.32
+    build:
+      context: .
+      dockerfile: vitech.Tomcat.Dockerfile
+    image: vitech/tomcat_dc
+    hostname: vitechTomcat_dc
+    container_name: vitechTomcat_dc
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: America/New_York
+    volumes:
+      - dcv_apachemod:/usr/local/apache2/logs
+
+volumes:
+  dcv_tomcatlogs:
+  dcv_tomcatapps: 
+  dcv_apachemod: 

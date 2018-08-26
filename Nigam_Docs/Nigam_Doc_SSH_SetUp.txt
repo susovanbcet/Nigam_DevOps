@@ -1,0 +1,50 @@
+
+docker container run -it -d --name client --net ansinet -p 22 ubuntu bash
+docker exec -it client bash
+
+Container root:
+...............
+useradd -m devops
+passwd devops - devops123
+mkdir /home/devops
+chown -R devops:devops /home/devops
+apt-get update
+apt-get install --no-install-recommends -y software-properties-common
+apt-get install openssh-server openssh-client -y
+eval "$(ssh-agent -s)"
+apt-get update
+
+mkdir /var/run/sshd
+chmod 0755 /var/run/sshd
+
+## ps -ef | grep ssh
+/usr/sbin/sshd -D&
+
+devops:
+ssh-keygen -t rsa
+
+su - devops
+cd /home/devops/.ssh
+touch authorized_keys
+
+
+docker container run -it -d --name server --net ansinet -p 22 ubuntu bash
+docker exec -it server bash
+
+
+--------------------------------------------------
+
+ * In ControlServer as devops:
+   ssh-keygen -t rsa
+   cat /home/devops/.ssh/id_rsa.pub
+
+ * In destination server as devops:
+   cd /home/devops/.ssh/
+   nano /home/devops/.ssh/authorized_keys
+   echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnezuuNfm/A3rrjqV383aldVV4d/nQMxRb+IIN26UptR5Vw4racI1Ob9ZReG5lrGwvBMaB7hPIYDUd8AZEFXQkI9X3b/8bZ5KMOsVMCSTGnwtrfNWqOb25jsS4G21RKy4Oa4dOcXcVyse+5tH+mIzaxO7Ky2CdykdO8lqwFR4l+Y2E9PaPcRgr9eXuuo4jF5sy8A31eukGfYGTRaBwuNJWn7ZQSZYJr0aHW/U2BUxxRlfWfSkplpdu2XVgTdW9aq84xNJkd6/gacfi9zYW/pHo+U+gIMXNRNiyaDlXX0J68KzBXHeldoiyxMy2g2rymdb7rtH3qko3EDUjQxkXjkqX devops@869d409c1c9a" >> authorized_keys
+   echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDnsfpauGQkDR5/8mhWn86sRbQuwOVVmGvWHG6gsNjT9iSl8c7Ad2isXSbgfXaMPb2LEQbDWQKBf0i24GvWJ0/PF5BgSXpJrWdtbKg4XyiHb5AV+aWyTTjndlWgqbxnVPCVcOUx3k/imSc0xDcoGhPBDOtlRLHrMBYoNDT9L150bde8199xe+Gf4UAe9SfFy9KJUiSInjX2OY/yq3qzoM2/iciMdAWVMF/VT0eV+CvvoGMh1PKtm0irrskKQfggb6ScIITtiSyafgU/BojG3ewBxsuKChjMP5+JpGOWHwEYI/1TkI5kGiy9BhZAqyQUpAl2YmArJW9Tg8Y3GZYVMk8N devops@869d409c1c9a" >> authorized_keys
+
+         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzQ1DuhDPmld2R58LpbbbMonAgDyipS91XLLK/4GnDiI95NmY6HzzDhiIkwvZ8f53sn35GcBfPryNgbEIqF8evpOAftiGOf7wVQI5h12T6ymO5Z5EMgOfDSmK3BJf1kw960DcG7WRiIlFALiBGp3JHbY/dJxv+0D0+Yb3Shr5zNkrz0EMMpSJHQPAiyRu+3wqj44atMXhIvCmZxL95EiKGNqINeJIr2mGBO+ePf6RG783MBvx0ObeGmWHZDPemMPj98WFaAnpN/NwwFGbo2J61pM2BqRTcMi7dC853ueoUrBVfkkqNAgqwwGLvTStuKtj6JnRtCxllbp6m6Njd0Kst devops@localhost.localdomain
+
+         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqQ58saCeXY3c77jnyjUEsP8rHDmNNdk3zujLcmzHFM6eOplZqW4bv+t/6Xz8naeL/AZkJTQwMiJC62Qjitza2f2MEkuw4d7QIF+/XHZFuDjlS+N7zoirAkWN0rgwqO3FZh4OjsClVRPYRjTGTjbWtLrophSQiSo8KqBHqRfDOTe7cJ2x6ehQupq7eaj51rKz8GqKEfCXgMx27cqdTCjauwCgVQuRwhV1D7xZHx/aTnh6rHnsAlYX59RXerMvvJI5l0JKYex/d/Ld4bE/qI6D4SNyxMXtm/LelMvZh6zoGEiMt5qPTeiq/Jx63BEAn3emXdw4hmGReWtOC1Onx37uJ devops@localhost.localdomain
+   wc -l authorized_keys

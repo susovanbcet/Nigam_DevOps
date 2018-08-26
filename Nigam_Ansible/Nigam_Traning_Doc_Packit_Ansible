@@ -1,0 +1,788 @@
+
+
+http://www.ansible-playable.com/
+ Ansible Playbook generator and orchestrator
+ Try it !
+ > docker run mmumshad/ansible-playable
+
+
+* SSH to a machine: 
+ ssh <hostname/IP>
+
+* SSH to a machine as a specific user: 
+ ssh <hostname/IP> -l <user-name>
+
+* To Change the ssh config centos
+ vi /etc/ssh/sshd_config
+
+* To Reload the ssh config 
+ semanage port -a -t ssh_port_t -p tcp <port-no>
+
+* To Install IT Manage Utility
+ yum -y install policycoreutils-python 
+
+* To Open a Port / Firewall Port
+ firewall-cmd --permanent --add-port=<port-no>/tcp
+ firewall-cmd --permanent --add-port=2222/tcp
+
+* To Reload Firewall Port after change
+ firewall-cmd --reload 
+
+* Restart the SSHD service 
+ service sshd restart
+
+* To check the SSH service running on a specific port
+ ssh <host-name> -p <port-no>
+ ssh 0.0.0.0 -p 2222
+ ssh 0 -p 2222
+
+* TELNET Connect to a machine on specific port
+ telnet <host-name> <port-no>
+ telnet centos1 2222
+ telnet centos2 22
+ telnet centos3 80
+
+* SSH Connection using specific config file
+ ssh -F <custom-config-file> <host-name>
+ ssh -F sshd_config centos1
+ >> cat sshd_config (content of specific config file)
+  ## Custom for centos1
+  Host centos1
+    User root
+    Port 2222
+  ## Defaults
+  Port 22
+  Protocol 2
+  ForwardX11 yes
+  GSSAPIAuthentication no
+
+=> cat hosts
+ [control]
+ ubuntu-c ansible_connection=local
+
+ [centos]
+ centos1 ansible_user=root ansible_port=2222
+ centos2 ansible_user=root 
+ centos3 ansible_user=root 
+
+ [ubuntu]
+ ubuntu1 ansible_become=true ansible_become_pass=password
+ ubuntu2 ansible_become=true ansible_become_pass=password
+ ubuntu3 ansible_become=true ansible_become_pass=password
+
+
+=> cat hosts
+ [control]
+ ubuntu-c ansible_connection=local
+
+ [centos]
+ centos1 ansible_user=root ansible_port=2222
+ centos[2:3] ansible_user=root 
+
+
+ [ubuntu]
+ ubuntu[1:3] ansible_become=true ansible_become_pass=password
+
+
+=> cat hosts
+ [control]
+ ubuntu-c ansible_connection=local
+
+ [centos]
+ centos1 ansible_port=2222
+ centos[2:3] 
+
+ [centos:vars]
+ ansible_user=root
+
+ [ubuntu]
+ ubuntu[1:3]
+
+ [ubuntu:vars]
+ ansible_become=true 
+ ansible_become_pass=password
+
+ [linux:children]
+ centos
+ ubuntu
+
+ [all:vars]
+ ansible_port=1234
+
+
+* Over-ride the ansible environment variable at runtime
+ ansible all -m ping -e 'ansible_port=22'
+
+* Ansible Colours
+ Green = Success
+ Yellow = Success with Changes
+ Red = Failure
+
+* Ansible Modules
+ Setup Module: to get info about ansible/host setup 
+  /usr/bin/ansible
+ File Module
+ Copy Module
+ command module
+
+* To get the details about a host/server
+ ansible <host-name> -m setup 
+ ansible centos1 -m setup
+
+
+* Ansible File Module: To Create an empty file in hosts
+ ansible all -m file -a 'path=/tmp/test state=touch'
+
+* Ansible File Module: To Create a file in hosts with Permission
+ ansible all -m file -a 'path=/tmp/test state=file mode=600'
+
+
+* Ansible Idempotency: 
+
+
+* Ansible Copy Module: To Copy a file from control host to selected nodes/hosts
+ ansible all -m copy -a 'src=/tmp/abc dest=/tmp/abc'
+
+* Ansible Copy Module: To Copy a file from remote host to selected nodes/hosts
+ ansible all -m copy -a 'remote_src=yes src=/tmp/abc dest=/tmp/xyz'
+
+
+* Ansible command Module: To run a command on selected nodes/hosts
+ ansible all -m command -a 'hostname' -o
+ # By default command module is the default module to be used 
+ ansible all -a 'hostname' -o
+ ansible all -a 'id' (to see ansible connecting user)
+ ansible all -a 'touch /tmp/test_copy_module creates=/tmp/test_copy_module' 
+
+ ansible all -a 'rm /tmp/test_copy_module removes=/tmp/test_copy_module' (rmoving file using Command module) 
+ ansible all -m file -a 'path=/tmp/test_copy_module state=absent' (rmoving file using File module) 
+
+
+* Create a file in a machine (centos) and fetch that to localhost 
+ ansible centos1 -m file -a 'path=/tmp/test.txt state=touch mode=600'
+ ansible centos1 -m fetch -a 'src=/tmp/test.txt dest=/tmp/test.txt'
+
+
+
+* Ansible doc command
+ ansible-doc <module name>
+ ansible-doc file
+
+
+-------------------------------------------------------------------
+
+YAML :
+
+* Useful Links: 
+ http://yaml.org/spec/1.2/spec.html
+ https://en.wikipedia.org/wiki/YAML
+ https://stackoverflow.com/questions/3790454/in-yaml-how-do-i-break-a-string-over-multiple-lines
+
+
+-------------------------------------------------------------------
+Ansible Play Books:
+
+
+* PlayBook Skeliton:
+
+---
+ # Target
+ hosts: linux
+ sudo
+ user
+ sudo_user
+ connection
+ gather_facts: false
+
+ # Variable
+ vars:
+  motd_centos: "Welcome to CentOS Linux - Ansible Rocks\n"
+  motd_ubuntu: "Welcome to Ubuntu Linux - Ansible Rocks\n"
+  dict:
+   dict_key: "Dict Values"
+  inline_dict:
+   {inline_dict_key: This is an inline dictionary values"}
+  named_list:
+   - item1
+   - item2
+  inline_named_list:
+   [item1, item2]
+ var_files: 
+  - external_vars.yml
+
+ var_prompt:
+  - name: username
+    private: true
+
+ # Task:
+ tasks:
+  - name:
+   copy(module1):
+    param1:
+    param2:
+   notify(module2): Handler-1
+   when: ansible_distribution == "CentOS"
+
+  - name:
+   copy(module1):
+    param1:
+    param2:
+   notify(module2): Handler-1
+   when: ansible_distribution == "Ubuntu"
+
+  - name: Jinjer2 template
+   template:
+    src: template.j2
+    dest: "/tmp/{{ansible_hostname}}_template.out"
+    trim_blocks: true
+
+ # Handlers
+ handlers:
+  - name: Handler-1
+   debug(module1):
+    msg(param1): "Reporting Changes"
+
+ # Roles
+...
+
+
+
+* Run the ansible play books with TIMING details
+ time ansible-playbook playbook-name.yml
+
+
+-------------------------------------------------------------------
+./
+ |--ansible.cfg
+ |--group_vars*
+ | |--centos
+ | |--ubuntu
+ |--hosts
+ |--host_vars*
+ | |--centos1
+ | |--ubuntu-c
+ |--my_playbook.yml
+
+
+
+
+-------------------------------------------------------------------
+Ansible Facts:
+
+* ansible centos1 -m setup -a 'gather_subset=network' | more
+* ansible centos1 -m setup -a 'gather_subset=network, !all, !min' | more
+* ansible centos1 -m setup -a 'filter=ansible_memfree_mb'
+* ansible centos1 -m setup -a 'filter=ansible_mem*'
+
+* Ansible to gather the Default FACTS from the host (centos1) system. 
+ ansible centos1 -m setup | more 
+
+* Ansible Custom FACTS can be written in any language and returns JSON and INI structure
+
+* Ansible expects custom facts be placed at below location by default. 
+ /etc/ansible/facts.d/
+
+
+* To create custom facts in ansible 
+ 1. create a /etc/ansible/facts.d/ directory
+  sudo mkdir -p /etc/ansible/facts.d/
+ 2. Copy "custom facts" files to above location
+  sudo cp getdata1.fact, getdata2.fact /etc/ansible/facts.d/
+  sudo cp * /etc/ansible/facts.d/
+ 3. Make sure your *.facts files copied to /etc/ansible/facts.d/
+  ls -althr /etc/ansible/facts.d/
+   -rwxr-xr-x 1 root root 41 Jun 19 16:00 getdata2.fact
+   -rwxr-xr-x 1 root root 45 Jun 19 16:00 getdata1.fact
+ 4. Run ansible script to check the "Custom Facts" 
+  ansible ubuntu-c -m setup | tee /temp/xyz.log 
+    Now getdata1, and getdata2 should be there in /temp/xyz.log file
+
+
+
+-------------------------------------------------------------------
+Jinger2: 
+
+For Multiline message
+ > 
+
+Jinger2: For Commenting
+ {#	#}
+ {#	-#} : '-' to skip the newline character in output
+
+
+Jinger2: Looping - if elif else
+
+ {% if ansible_hostname == "ubuntu-c" -%}
+  This is ubuntu-c
+ {% elif ansible_hostname == "centos1" -%}
+  This is CentOS with modified SSH port
+ {% else -%}
+  This is good old {{ansible_hostname}} 
+ {% endif %}
+
+
+Jinger2: Looping - if else with variable
+
+ {% set example_variable = 'defined' -%}
+
+ {% if example_variable is defined -%}
+  example_variable is defined 
+ {% else -%}
+  example_variable is not defined 
+ {% endif %}
+
+
+Jinger2: Looping - for loop
+
+ {% for entry in ansible_all_ipv4_addresses -%}
+  IP Address entry {{ loop.index }} = {{ entry }}
+ {% endfor %}
+
+
+ {% for entry in range(1, 11) -%}
+  {{ entry }}
+ {% endfor %}
+
+
+Jinger2: Looping - "break" and "continue" 
+ "break" and "continue" are not available to Ansible by default
+ To add "break" and "continue" capability to ansible update ansible.conf file
+ and add the line below to ansible.conf file
+  jinja2_extensions = jinja2.ext.loopcontrols
+
+  vi ansible.cfg
+   [defaults]
+   inventory = hosts
+   host_key_checking - False
+   jinja2_extensions = jinja2.ext.loopcontrols
+
+
+Jinger2: Looping - for loop with "break" and "continue" 
+
+ {% for entry in range(10, 0. -1) -%}
+  {% if entry ==5 -%}	
+   {% break %}
+  {% endif -%}
+  {{ entry }}
+ {% endfor %}
+
+ {% for entry in range(10, 0. -1) -%}
+  {% if entry is odd -%}	
+   {% continue %}
+  {% endif -%}
+  {{ entry }}
+ {% endfor %}
+
+
+Jinger2: Filters
+
+ min: {{ [1, 2, 3, 4, 5] | min }}	Result=>	1
+ max: {{ [1, 2, 3, 4, 5] | max }}	Result=>	5
+ unique: {{ [1, 1, 2, 2, 3, 3, 4, 4, 5] | max }} Result=> [1, 2, 3, 4, 5]
+ difference: {{ [1, 2, 3, 4, 5] | difference ([2, 3, 4]) }} Result=> [1, 5]
+ random: {{ ['rob', 'jane', 'freddy'] | random }} Result=> any one name
+ urlsplit: {{ "https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html" | urlsplit('hostname')}} Result=> docs.ansible.com
+
+-------------------------------------------------------------------
+Template Module
+
+
+-------------------------------------------------------------------
+register and when
+
+
+-------------------------------------------------------------------
+Ansible Looping:
+*
+ ---
+ hosts: linux
+
+ tasks:
+   - name: Configuer a MOT (Message of the day) (--looping using "with_items")
+     copy: 
+  content: "Welcome to {{ item }} Linux - Ansible Rocks!\n"
+  dest: /etc/motd
+     notify: MOTD Changed
+     with_items: [ 'CentOS', 'Ubuntu' ]
+     when: ansible_distribution == item
+
+   - name: Configuer a MOT (Message of the day) (--looping using "with_items" in YAML format input)
+     copy: 
+  content: "Welcome to {{ item }} Linux - Ansible Rocks!\n"
+  dest: /etc/motd
+     notify: MOTD Changed
+     with_items: 
+  - CentOS
+  - Ubuntu
+     when: ansible_distribution == item
+
+ handlers:
+   - name: MOTD Changed
+     debug:
+       msg: The MOTD was changed
+ ...
+
+*	Loopint with "with_items"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item }}"
+     with_items: 
+  - Susovan
+  - Umesh
+  - Nigam
+ ...
+
+*	Loopint with "with_items"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item }}"
+  state: absent
+     with_items: 
+  - Susovan
+  - Umesh
+  - Nigam
+ ...
+
+*	Loopint with "with_dics"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item.key }}"
+  comment: "{{ item.value.full_name }}"
+     with_dics: 
+  Susovan:
+     full_name: Susovan Kar
+  Umesh:
+     full_name: Umesh Rout
+  Nigam:
+     full_name: Nigam Rout
+ ...
+
+*	Loopint with "with_subelements"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item.1 }}"
+  comment: "{{ item.1 | title }} {{item.0.surname }}"
+     with_subelements: 
+         - family:
+      surname: Rout
+      members:
+   - Susovan
+   - Umesh
+   - Nigam
+         - members
+ ...
+
+*	Loopint with "with_subelements"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item.1 }}"
+  comment: "{{ item.1 | title }} {{item.0.surname }}"
+     with_subelements: 
+         - 
+    -surname: Rout
+     members:
+   - Sangita
+   - Anjali
+   - Umesh
+   - Nigam
+    -surname: Kar
+     members:
+   - Susovan
+   - Somya
+         - members
+ ...
+
+*	Loopint with "with_nested"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item.1 }}"
+  comment: "{{ item.1 | title }} {{item.0.surname }}"
+     with_subelements: 
+         - 
+    -surname: Rout
+     members:
+   - Sangita
+   - Anjali
+   - Umesh
+    -surname: Kar
+     members:
+   - Susovan
+   - Somya
+         - members
+
+   - name: creating user directories
+     file: 
+  dest: "/home/{{ item.0 }}/{{ item.1 }}"
+  owner: "{{ item.0 }}"
+  group: "{{ item.0 }}" 
+  state: directory
+     with_nested: 
+         - [Sangita, Anjali, Umesh, Susovan, Somya]
+  - [photos, movies, documents]
+
+ ...
+
+
+
+*	Loopint with "with_together"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item.1 }}"
+  comment: "{{ item.1 | title }} {{item.0.surname }}"
+     with_subelements: 
+         - 
+    -surname: Rout
+     members:
+   - Sangita
+   - Anjali
+   - Umesh
+    -surname: Kar
+     members:
+   - Susovan
+   - Somya
+         - members
+
+   - name: creating user directories
+     file: 
+  dest: "/home/{{ item.0 }}/{{ item.1 }}"
+  owner: "{{ item.0 }}"
+  group: "{{ item.0 }}" 
+  state: directory
+     with_together: 
+         - [Sangita, Anjali, Umesh, Susovan, Somya]
+  - [Personal, Business, Apple, Food, Mobile]
+
+ ...
+
+
+*	Loopint with "with_file"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item.key }}"
+  comment: "{{ item.value.full_name }}"
+     with_dict: 
+         nigam:
+    full _name: Nigam Rout
+
+   - name: creating authorized key
+     authorized_key: 
+  user: nigam
+  key: "{{ item }}"
+     with_file: 
+         - /home/nigam/.ssh/id_rsa.pub
+ ...
+
+
+*	Loopint with "with_file"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item.key }}"
+  comment: "{{ item.value.full_name }}"
+     with_dict: 
+         nigam:
+    full _name: Nigam Rout
+
+   - name: creating authorized key
+     authorized_key: 
+  user: nigam
+  key: "{{ item }}"
+     with_file: 
+         - /home/nigam/.ssh/id_rsa.pub
+  - custom_key.pub
+ ...
+
+
+*	Loopint with "with_sequence"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item.key }}"
+  comment: "{{ item.value.full_name }}"
+     with_dict: 
+         nigam:
+    full _name: Nigam Rout
+
+   - name: creating sequence Directories
+     file:
+  dest: "/home/nigam/sequence_{{ item }}"
+  state: directory
+     with_sequence: start=0 end=100 stride=10
+
+   - name: creating sequence Directories - with formating (decimal)
+     file:
+  dest: "/home/nigam/sequence_{{ item }}"
+  state: directory
+     with_sequence: start=0 end=100 stride=10 format=/home/nigam/sequence_%d
+
+   - name: creating sequence Directories - with formating (Hex)
+     file:
+  dest: "/home/nigam/sequence_{{ item }}"
+  state: directory
+     with_sequence: start=0 end=16 stride=1 format=/home/nigam/sequence_%x
+
+   - name: creating sequence Directories - with formating (Hex)
+     file:
+  dest: "/home/nigam/sequence_{{ item }}"
+  state: directory
+     with_sequence: count=5 format=/home/nigam/sequence_%x
+ ...
+
+*	Loopint with "with_random_choice"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: creating user
+     user: 
+  name: "{{ item.key }}"
+  comment: "{{ item.value.full_name }}"
+     with_dict: 
+         nigam:
+    full _name: Nigam Rout
+
+   - name: creating random directory
+     file:
+  dest: "/home/nigam/{{ item }}"
+  state: directory
+     with_random_choice: 
+  - "google"
+  - "facebook"
+  - "microsoft"
+  - "apple"
+ ...
+
+
+*	Loopint with "until"
+ ---
+ hosts: linux
+
+ tasks:
+   - name: Run a script untill we hit 10
+     script: random_num.sh
+     register: result
+     retries: 100
+     untill: result.stdout.find("10" != -1
+ ...
+-------------------------------------------------------------------
+
+* with linear statergy bydefault is 5 forks
+
+* Change the size/count of forks by updating ansible.comf file as forks=<number-of-forks>
+ cat ansible.cfg
+     [defaults]
+     inventory = hosts
+     host_key_checking = false
+     forks=10
+
+* Seriel nature of Ansible Execution in "batches"
+  hosts: linux
+ gather_facts: false
+ serail: 2
+ tasks:
+   - name: Task1
+     command: /bin/sleep 1
+   - name: Task2
+     command: /bin/sleep 1
+   - name: Task3
+     command: /bin/sleep 1
+
+
+  hosts: linux
+ gather_facts: false
+ serail:
+   - 1
+   - 2
+   - 3
+ tasks:
+   - name: Task1
+     command: /bin/sleep 1
+   - name: Task2
+     command: /bin/sleep 1
+   - name: Task3
+     command: /bin/sleep 1
+
+  hosts: linux
+ gather_facts: false
+ serail: 2
+ tasks:
+   - name: Task1
+     command: /bin/sleep 1
+   - name: Task2
+     command: /bin/sleep 1
+   - name: Task3
+     command: /bin/sleep 1
+
+
+  hosts: linux
+ gather_facts: false
+ strategy: free
+ tasks:
+   - name: Task1
+     command: /bin/sleep 1
+   - name: Task2
+     command: /bin/sleep 1
+   - name: Task3
+     command: /bin/sleep 1
+
+-------------------------------------------------------------------
+Task Delegation
+
+* install hostman utility 
+ Update the Ubuntu --> apt-get update
+ install pip --> apt-get install python-pip
+ install hostman using pip --> pip install hostman
+
+* Get our list of host file from etc/hosts file
+ hostman -l 
+
+-------------------------------------------------------------------
+Using Include and Imports
+
+ include tasks
+ inslude playbooks
+
+ include_tasks
+ import_playbooks
+ import_tasks
+
+
+-------------------------------------------------------------------

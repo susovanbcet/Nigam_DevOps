@@ -1,0 +1,684 @@
+[nigam@localhost Nigam_Docker]$ 
+[nigam@localhost Nigam_Docker]$ cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+> [kubernetes]
+> name=Kubernetes
+> baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+> enabled=1
+> gpgcheck=1
+> repo_gpgcheck=1
+> gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+> EOF
+bash: /etc/yum.repos.d/kubernetes.repo: Permission denied
+[nigam@localhost Nigam_Docker]$ 
+[nigam@localhost Nigam_Docker]$ 
+[nigam@localhost Nigam_Docker]$ pwd
+/home/nigam/Nigam_DevOps/Nigam_Docker
+[nigam@localhost Nigam_Docker]$ 
+[nigam@localhost Nigam_Docker]$ su 
+Password: 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+> [kubernetes]
+> name=Kubernetes
+> baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+> enabled=1
+> gpgcheck=1
+> repo_gpgcheck=1
+> gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+> EOF
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# setenforce 0
+[root@localhost Nigam_Docker]# yum install -y kubelet kubeadm kubectl
+Loaded plugins: fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+epel/x86_64/metalink                                                                                                                                      |  19 kB  00:00:00     
+ * base: mirror.metrocast.net
+ * epel: mirror.metrocast.net
+ * extras: mirror.steadfast.net
+ * updates: mirrors.advancedhosters.com
+FedoraPeople-sea                                                                                                                                          | 2.9 kB  00:00:00     
+adobe-linux-x86_64                                                                                                                                        | 2.9 kB  00:00:00     
+azure-cli                                                                                                                                                 | 2.9 kB  00:00:00     
+base                                                                                                                                                      | 3.6 kB  00:00:00     
+code                                                                                                                                                      | 2.9 kB  00:00:00     
+docker-ce-stable                                                                                                                                          | 2.9 kB  00:00:00     
+epel                                                                                                                                                      | 3.2 kB  00:00:00     
+extras                                                                                                                                                    | 3.4 kB  00:00:00     
+google-chrome                                                                                                                                             |  951 B  00:00:00     
+kubernetes/signature                                                                                                                                      |  454 B  00:00:00     
+Retrieving key from https://packages.cloud.google.com/yum/doc/yum-key.gpg
+Importing GPG key 0xA7317B0F:
+ Userid     : "Google Cloud Packages Automatic Signing Key <gc-team@google.com>"
+ Fingerprint: d0bc 747f d8ca f711 7500 d6fa 3746 c208 a731 7b0f
+ From       : https://packages.cloud.google.com/yum/doc/yum-key.gpg
+Retrieving key from https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+kubernetes/signature                                                                                                                                      | 1.4 kB  00:00:00 !!! 
+mysql-connectors-community                                                                                                                                | 2.5 kB  00:00:00     
+mysql-tools-community                                                                                                                                     | 2.5 kB  00:00:00     
+mysql57-community                                                                                                                                         | 2.5 kB  00:00:00     
+updates                                                                                                                                                   | 3.4 kB  00:00:00     
+(1/3): epel/x86_64/updateinfo                                                                                                                             | 931 kB  00:00:00     
+(2/3): kubernetes/primary                                                                                                                                 |  30 kB  00:00:00     
+(3/3): epel/x86_64/primary                                                                                                                                | 3.5 MB  00:00:01     
+google-chrome/primary                                                                                                                                     | 1.9 kB  00:00:00     
+epel                                                                                                                                                                 12588/12588
+google-chrome                                                                                                                                                                3/3
+kubernetes                                                                                                                                                               214/214
+Resolving Dependencies
+--> Running transaction check
+---> Package kubeadm.x86_64 0:1.10.4-0 will be installed
+--> Processing Dependency: kubernetes-cni for package: kubeadm-1.10.4-0.x86_64
+---> Package kubectl.x86_64 0:1.10.4-0 will be installed
+---> Package kubelet.x86_64 0:1.10.4-0 will be installed
+--> Processing Dependency: socat for package: kubelet-1.10.4-0.x86_64
+--> Running transaction check
+---> Package kubernetes-cni.x86_64 0:0.6.0-0 will be installed
+---> Package socat.x86_64 0:1.7.3.2-2.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+=================================================================================================================================================================================
+ Package                                      Arch                                 Version                                        Repository                                Size
+=================================================================================================================================================================================
+Installing:
+ kubeadm                                      x86_64                               1.10.4-0                                       kubernetes                                17 M
+ kubectl                                      x86_64                               1.10.4-0                                       kubernetes                               7.6 M
+ kubelet                                      x86_64                               1.10.4-0                                       kubernetes                                17 M
+Installing for dependencies:
+ kubernetes-cni                               x86_64                               0.6.0-0                                        kubernetes                               8.6 M
+ socat                                        x86_64                               1.7.3.2-2.el7                                  base                                     290 k
+
+Transaction Summary
+=================================================================================================================================================================================
+Install  3 Packages (+2 Dependent packages)
+
+Total download size: 51 M
+Installed size: 273 M
+Downloading packages:
+warning: /var/cache/yum/x86_64/7/kubernetes/packages/3bfc22d32a20afc46175242700455a62bb88eda8edf0867295ec83098de09aaf-kubectl-1.10.4-0.x86_64.rpm: Header V4 RSA/SHA512 Signature, key ID 3e1ba8d5: NOKEY
+Public key for 3bfc22d32a20afc46175242700455a62bb88eda8edf0867295ec83098de09aaf-kubectl-1.10.4-0.x86_64.rpm is not installed
+(1/5): 3bfc22d32a20afc46175242700455a62bb88eda8edf0867295ec83098de09aaf-kubectl-1.10.4-0.x86_64.rpm                                                       | 7.6 MB  00:00:01     
+(2/5): 56f73d32965af49f582da3d790a145c121843c20e99fdcc6dc05a23f6afff338-kubeadm-1.10.4-0.x86_64.rpm                                                       |  17 MB  00:00:03     
+(3/5): socat-1.7.3.2-2.el7.x86_64.rpm                                                                                                                     | 290 kB  00:00:00     
+(4/5): 2d41bb10c7142326719c9052e9f0301f0875c3f25761fa4740ba862eaae0888e-kubelet-1.10.4-0.x86_64.rpm                                                       |  17 MB  00:00:03     
+(5/5): fe33057ffe95bfae65e2f269e1b05e99308853176e24a4d027bc082b471a07c0-kubernetes-cni-0.6.0-0.x86_64.rpm                                                 | 8.6 MB  00:00:01     
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                            9.8 MB/s |  51 MB  00:00:05     
+Retrieving key from https://packages.cloud.google.com/yum/doc/yum-key.gpg
+Importing GPG key 0xA7317B0F:
+ Userid     : "Google Cloud Packages Automatic Signing Key <gc-team@google.com>"
+ Fingerprint: d0bc 747f d8ca f711 7500 d6fa 3746 c208 a731 7b0f
+ From       : https://packages.cloud.google.com/yum/doc/yum-key.gpg
+Retrieving key from https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+Importing GPG key 0x3E1BA8D5:
+ Userid     : "Google Cloud Packages RPM Signing Key <gc-team@google.com>"
+ Fingerprint: 3749 e1ba 95a8 6ce0 5454 6ed2 f09c 394c 3e1b a8d5
+ From       : https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : kubectl-1.10.4-0.x86_64                                                                                                                                       1/5 
+  Installing : socat-1.7.3.2-2.el7.x86_64                                                                                                                                    2/5 
+  Installing : kubelet-1.10.4-0.x86_64                                                                                                                                       3/5 
+  Installing : kubernetes-cni-0.6.0-0.x86_64                                                                                                                                 4/5 
+  Installing : kubeadm-1.10.4-0.x86_64                                                                                                                                       5/5 
+  Verifying  : kubernetes-cni-0.6.0-0.x86_64                                                                                                                                 1/5 
+  Verifying  : kubelet-1.10.4-0.x86_64                                                                                                                                       2/5 
+  Verifying  : kubeadm-1.10.4-0.x86_64                                                                                                                                       3/5 
+  Verifying  : socat-1.7.3.2-2.el7.x86_64                                                                                                                                    4/5 
+  Verifying  : kubectl-1.10.4-0.x86_64                                                                                                                                       5/5 
+
+Installed:
+  kubeadm.x86_64 0:1.10.4-0                                 kubectl.x86_64 0:1.10.4-0                                 kubelet.x86_64 0:1.10.4-0                                
+
+Dependency Installed:
+  kubernetes-cni.x86_64 0:0.6.0-0                                                          socat.x86_64 0:1.7.3.2-2.el7                                                         
+
+Complete!
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# systemctl enable kubelet && systemctl start kubelet
+Created symlink from /etc/systemd/system/multi-user.target.wants/kubelet.service to /etc/systemd/system/kubelet.service.
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# cat <<EOF >  /etc/sysctl.d/k8s.conf
+> net.bridge.bridge-nf-call-ip6tables = 1
+> net.bridge.bridge-nf-call-iptables = 1
+> EOF
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# sysctl --system
+* Applying /usr/lib/sysctl.d/00-system.conf ...
+net.bridge.bridge-nf-call-ip6tables = 0
+net.bridge.bridge-nf-call-iptables = 0
+net.bridge.bridge-nf-call-arptables = 0
+* Applying /usr/lib/sysctl.d/10-default-yama-scope.conf ...
+kernel.yama.ptrace_scope = 0
+* Applying /usr/lib/sysctl.d/50-default.conf ...
+kernel.sysrq = 16
+kernel.core_uses_pid = 1
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.default.promote_secondaries = 1
+net.ipv4.conf.all.promote_secondaries = 1
+fs.protected_hardlinks = 1
+fs.protected_symlinks = 1
+* Applying /usr/lib/sysctl.d/60-libvirtd.conf ...
+fs.aio-max-nr = 1048576
+* Applying /etc/sysctl.d/99-sysctl.conf ...
+* Applying /etc/sysctl.d/k8s.conf ...
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+* Applying /etc/sysctl.conf ...
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# docker info | grep -i cgroup
+Cgroup Driver: cgroupfs
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# cat /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+[Service]
+Environment="KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf"
+Environment="KUBELET_SYSTEM_PODS_ARGS=--pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true"
+Environment="KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin"
+Environment="KUBELET_DNS_ARGS=--cluster-dns=10.96.0.10 --cluster-domain=cluster.local"
+Environment="KUBELET_AUTHZ_ARGS=--authorization-mode=Webhook --client-ca-file=/etc/kubernetes/pki/ca.crt"
+Environment="KUBELET_CADVISOR_ARGS=--cadvisor-port=0"
+Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
+Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true --cert-dir=/var/lib/kubelet/pki"
+ExecStart=
+ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_SYSTEM_PODS_ARGS $KUBELET_NETWORK_ARGS $KUBELET_DNS_ARGS $KUBELET_AUTHZ_ARGS $KUBELET_CADVISOR_ARGS $KUBELET_CGROUP_ARGS $KUBELET_CERTIFICATE_ARGS $KUBELET_EXTRA_ARGS
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# cat /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+[Service]
+Environment="KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf"
+Environment="KUBELET_SYSTEM_PODS_ARGS=--pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true"
+Environment="KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin"
+Environment="KUBELET_DNS_ARGS=--cluster-dns=10.96.0.10 --cluster-domain=cluster.local"
+Environment="KUBELET_AUTHZ_ARGS=--authorization-mode=Webhook --client-ca-file=/etc/kubernetes/pki/ca.crt"
+Environment="KUBELET_CADVISOR_ARGS=--cadvisor-port=0"
+Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"
+Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true --cert-dir=/var/lib/kubelet/pki"
+ExecStart=
+ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_SYSTEM_PODS_ARGS $KUBELET_NETWORK_ARGS $KUBELET_DNS_ARGS $KUBELET_AUTHZ_ARGS $KUBELET_CADVISOR_ARGS $KUBELET_CGROUP_ARGS $KUBELET_CERTIFICATE_ARGS $KUBELET_EXTRA_ARGS
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# systemctl daemon-reload
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# systemctl restart kubelet
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+
+
+
+
+# = = = = = = = = = = = = = = =
+
+
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# grep -E '(vmx|svm)' /proc/cpuinfo
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid xsaveopt ibpb ibrs stibp dtherm ida arat pln pts spec_ctrl intel_stibp
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid xsaveopt ibpb ibrs stibp dtherm ida arat pln pts spec_ctrl intel_stibp
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid xsaveopt ibpb ibrs stibp dtherm ida arat pln pts spec_ctrl intel_stibp
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid xsaveopt ibpb ibrs stibp dtherm ida arat pln pts spec_ctrl intel_stibp
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# clear
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# yum install qemu-kvm qemu-img virt-manager libvirt libvirt-python libvirt-client virt-install virt-viewer bridge-utils
+Loaded plugins: fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+ * base: repos-va.psychz.net
+ * epel: epel.mirror.constant.com
+ * extras: mirror.atlanticmetro.net
+ * updates: mirrors.advancedhosters.com
+Package 10:qemu-kvm-1.5.3-156.el7_5.2.x86_64 already installed and latest version
+Package 10:qemu-img-1.5.3-156.el7_5.2.x86_64 already installed and latest version
+Package bridge-utils-1.5-9.el7.x86_64 already installed and latest version
+Resolving Dependencies
+--> Running transaction check
+---> Package libvirt.x86_64 0:3.9.0-14.el7_5.5 will be installed
+--> Processing Dependency: libvirt-daemon-driver-lxc = 3.9.0-14.el7_5.5 for package: libvirt-3.9.0-14.el7_5.5.x86_64
+--> Processing Dependency: libvirt-daemon-config-nwfilter = 3.9.0-14.el7_5.5 for package: libvirt-3.9.0-14.el7_5.5.x86_64
+---> Package libvirt-client.x86_64 0:3.9.0-14.el7_5.5 will be installed
+--> Processing Dependency: gnutls-utils for package: libvirt-client-3.9.0-14.el7_5.5.x86_64
+---> Package libvirt-python.x86_64 0:3.9.0-1.el7 will be installed
+---> Package virt-install.noarch 0:1.4.3-3.el7 will be installed
+--> Processing Dependency: virt-manager-common = 1.4.3-3.el7 for package: virt-install-1.4.3-3.el7.noarch
+---> Package virt-manager.noarch 0:1.4.3-3.el7 will be installed
+---> Package virt-viewer.x86_64 0:5.0-10.el7 will be installed
+--> Running transaction check
+---> Package gnutls-utils.x86_64 0:3.3.26-9.el7 will be installed
+--> Processing Dependency: gnutls-dane(x86-64) = 3.3.26-9.el7 for package: gnutls-utils-3.3.26-9.el7.x86_64
+--> Processing Dependency: libgnutls-dane.so.0(DANE_0_0)(64bit) for package: gnutls-utils-3.3.26-9.el7.x86_64
+--> Processing Dependency: libgnutls-dane.so.0()(64bit) for package: gnutls-utils-3.3.26-9.el7.x86_64
+---> Package libvirt-daemon-config-nwfilter.x86_64 0:3.9.0-14.el7_5.5 will be installed
+---> Package libvirt-daemon-driver-lxc.x86_64 0:3.9.0-14.el7_5.5 will be installed
+---> Package virt-manager-common.noarch 0:1.4.3-3.el7 will be installed
+--> Processing Dependency: python-ipaddr for package: virt-manager-common-1.4.3-3.el7.noarch
+--> Running transaction check
+---> Package gnutls-dane.x86_64 0:3.3.26-9.el7 will be installed
+---> Package python-ipaddr.noarch 0:2.1.11-1.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+=================================================================================================================================================================================
+ Package                                                  Arch                             Version                                       Repository                         Size
+=================================================================================================================================================================================
+Installing:
+ libvirt                                                  x86_64                           3.9.0-14.el7_5.5                              updates                           173 k
+ libvirt-client                                           x86_64                           3.9.0-14.el7_5.5                              updates                           459 k
+ libvirt-python                                           x86_64                           3.9.0-1.el7                                   base                              335 k
+ virt-install                                             noarch                           1.4.3-3.el7                                   base                               94 k
+ virt-manager                                             noarch                           1.4.3-3.el7                                   base                              652 k
+ virt-viewer                                              x86_64                           5.0-10.el7                                    base                              394 k
+Installing for dependencies:
+ gnutls-dane                                              x86_64                           3.3.26-9.el7                                  base                               34 k
+ gnutls-utils                                             x86_64                           3.3.26-9.el7                                  base                              237 k
+ libvirt-daemon-config-nwfilter                           x86_64                           3.9.0-14.el7_5.5                              updates                           180 k
+ libvirt-daemon-driver-lxc                                x86_64                           3.9.0-14.el7_5.5                              updates                           902 k
+ python-ipaddr                                            noarch                           2.1.11-1.el7                                  base                               35 k
+ virt-manager-common                                      noarch                           1.4.3-3.el7                                   base                              1.2 M
+
+Transaction Summary
+=================================================================================================================================================================================
+Install  6 Packages (+6 Dependent packages)
+
+Total download size: 4.6 M
+Installed size: 16 M
+Is this ok [y/d/N]: y
+Downloading packages:
+(1/12): gnutls-utils-3.3.26-9.el7.x86_64.rpm                                                                                                              | 237 kB  00:00:00     
+(2/12): libvirt-3.9.0-14.el7_5.5.x86_64.rpm                                                                                                               | 173 kB  00:00:00     
+(3/12): gnutls-dane-3.3.26-9.el7.x86_64.rpm                                                                                                               |  34 kB  00:00:00     
+(4/12): libvirt-python-3.9.0-1.el7.x86_64.rpm                                                                                                             | 335 kB  00:00:00     
+(5/12): virt-install-1.4.3-3.el7.noarch.rpm                                                                                                               |  94 kB  00:00:00     
+(6/12): python-ipaddr-2.1.11-1.el7.noarch.rpm                                                                                                             |  35 kB  00:00:00     
+(7/12): libvirt-daemon-config-nwfilter-3.9.0-14.el7_5.5.x86_64.rpm                                                                                        | 180 kB  00:00:00     
+(8/12): virt-manager-1.4.3-3.el7.noarch.rpm                                                                                                               | 652 kB  00:00:00     
+(9/12): libvirt-client-3.9.0-14.el7_5.5.x86_64.rpm                                                                                                        | 459 kB  00:00:00     
+(10/12): virt-viewer-5.0-10.el7.x86_64.rpm                                                                                                                | 394 kB  00:00:00     
+(11/12): virt-manager-common-1.4.3-3.el7.noarch.rpm                                                                                                       | 1.2 MB  00:00:00     
+(12/12): libvirt-daemon-driver-lxc-3.9.0-14.el7_5.5.x86_64.rpm                                                                                            | 902 kB  00:00:00     
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                            3.9 MB/s | 4.6 MB  00:00:01     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : libvirt-python-3.9.0-1.el7.x86_64                                                                                                                            1/12 
+  Installing : libvirt-daemon-driver-lxc-3.9.0-14.el7_5.5.x86_64                                                                                                            2/12 
+  Installing : gnutls-dane-3.3.26-9.el7.x86_64                                                                                                                              3/12 
+  Installing : gnutls-utils-3.3.26-9.el7.x86_64                                                                                                                             4/12 
+  Installing : libvirt-client-3.9.0-14.el7_5.5.x86_64                                                                                                                       5/12 
+  Installing : libvirt-daemon-config-nwfilter-3.9.0-14.el7_5.5.x86_64                                                                                                       6/12 
+  Installing : python-ipaddr-2.1.11-1.el7.noarch                                                                                                                            7/12 
+  Installing : virt-manager-common-1.4.3-3.el7.noarch                                                                                                                       8/12 
+  Installing : virt-install-1.4.3-3.el7.noarch                                                                                                                              9/12 
+  Installing : virt-manager-1.4.3-3.el7.noarch                                                                                                                             10/12 
+  Installing : libvirt-3.9.0-14.el7_5.5.x86_64                                                                                                                             11/12 
+  Installing : virt-viewer-5.0-10.el7.x86_64                                                                                                                               12/12 
+  Verifying  : python-ipaddr-2.1.11-1.el7.noarch                                                                                                                            1/12 
+  Verifying  : virt-install-1.4.3-3.el7.noarch                                                                                                                              2/12 
+  Verifying  : libvirt-daemon-config-nwfilter-3.9.0-14.el7_5.5.x86_64                                                                                                       3/12 
+  Verifying  : virt-manager-1.4.3-3.el7.noarch                                                                                                                              4/12 
+  Verifying  : libvirt-client-3.9.0-14.el7_5.5.x86_64                                                                                                                       5/12 
+  Verifying  : gnutls-utils-3.3.26-9.el7.x86_64                                                                                                                             6/12 
+  Verifying  : virt-manager-common-1.4.3-3.el7.noarch                                                                                                                       7/12 
+  Verifying  : virt-viewer-5.0-10.el7.x86_64                                                                                                                                8/12 
+  Verifying  : gnutls-dane-3.3.26-9.el7.x86_64                                                                                                                              9/12 
+  Verifying  : libvirt-3.9.0-14.el7_5.5.x86_64                                                                                                                             10/12 
+  Verifying  : libvirt-daemon-driver-lxc-3.9.0-14.el7_5.5.x86_64                                                                                                           11/12 
+  Verifying  : libvirt-python-3.9.0-1.el7.x86_64                                                                                                                           12/12 
+
+Installed:
+  libvirt.x86_64 0:3.9.0-14.el7_5.5        libvirt-client.x86_64 0:3.9.0-14.el7_5.5        libvirt-python.x86_64 0:3.9.0-1.el7        virt-install.noarch 0:1.4.3-3.el7       
+  virt-manager.noarch 0:1.4.3-3.el7        virt-viewer.x86_64 0:5.0-10.el7                
+
+Dependency Installed:
+  gnutls-dane.x86_64 0:3.3.26-9.el7                             gnutls-utils.x86_64 0:3.3.26-9.el7            libvirt-daemon-config-nwfilter.x86_64 0:3.9.0-14.el7_5.5          
+  libvirt-daemon-driver-lxc.x86_64 0:3.9.0-14.el7_5.5           python-ipaddr.noarch 0:2.1.11-1.el7           virt-manager-common.noarch 0:1.4.3-3.el7                          
+
+Complete!
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# systemctl start libvirtd
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# systemctl enable libvirtd
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# lsmod | grep kvm
+kvm_intel             174841  0 
+kvm                   578558  1 kvm_intel
+irqbypass              13503  1 kvm
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# virt-manager
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+> [kubernetes]
+> name=Kubernetes
+> baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+> enabled=1
+> gpgcheck=1
+> repo_gpgcheck=1
+> gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+> EOF
+[root@localhost Nigam_Docker]# yum install -y kubectl
+Loaded plugins: fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+ * base: repos-va.psychz.net
+ * epel: epel.mirror.constant.com
+ * extras: mirror.atlanticmetro.net
+ * updates: ftpmirror.your.org
+kubernetes/signature                                                                                                                                      |  454 B  00:00:00     
+kubernetes/signature                                                                                                                                      | 1.4 kB  00:00:00 !!! 
+Package kubectl-1.10.4-0.x86_64 already installed and latest version
+Nothing to do
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# kubectl cluster-info
+Kubernetes master is running at http://localhost:8080
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.27.0/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 40.7M  100 40.7M    0     0  4983k      0  0:00:08  0:00:08 --:--:-- 2974k
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# kubectl cluster-info
+Kubernetes master is running at http://localhost:8080
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# minikube start
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+Downloading Minikube ISO
+ 150.53 MB / 150.53 MB [============================================] 100.00% 0s
+E0608 19:09:19.314582   11045 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
+: VBoxManage not found. Make sure VirtualBox is installed and VBoxManage is in the path.
+
+ Retrying.
+E0608 19:09:19.315053   11045 start.go:165] Error starting host:  Error creating host: Error executing step: Running precreate checks.
+: VBoxManage not found. Make sure VirtualBox is installed and VBoxManage is in the path
+================================================================================
+An error has occurred. Would you like to opt in to sending anonymized crash
+information to minikube to help prevent future errors?
+To opt out of these messages, run the command:
+	minikube config set WantReportErrorPrompt false
+================================================================================
+Please enter your response [Y/n]: 
+n
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# export MINIKUBE_WANTUPDATENOTIFICATION=false
+[root@localhost Nigam_Docker]# export MINIKUBE_WANTREPORTERRORPROMPT=false
+[root@localhost Nigam_Docker]# export MINIKUBE_HOME=$HOME
+[root@localhost Nigam_Docker]# export CHANGE_MINIKUBE_NONE_USER=true
+[root@localhost Nigam_Docker]# mkdir $HOME/.kube || true
+[root@localhost Nigam_Docker]# touch $HOME/.kube/config
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# export KUBECONFIG=$HOME/.kube/config
+[root@localhost Nigam_Docker]# minikube start
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+E0608 19:11:00.553001   17871 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
+: VBoxManage not found. Make sure VirtualBox is installed and VBoxManage is in the path.
+
+ Retrying.
+E0608 19:11:00.553728   17871 start.go:165] Error starting host:  Error creating host: Error executing step: Running precreate checks.
+: VBoxManage not found. Make sure VirtualBox is installed and VBoxManage is in the path
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# minikube start --vm-driver=kvm
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+WARNING: The kvm driver is now deprecated and support for it will be removed in a future release.
+				Please consider switching to the kvm2 driver, which is intended to replace the kvm driver.
+				See https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#kvm2-driver for more information.
+				To disable this message, run [minikube config set WantShowDriverDeprecationNotification false]
+E0608 19:11:51.229189   20599 start.go:159] Error starting host: Error creating new host: Driver "kvm" not found. Do you have the plugin binary "docker-machine-driver-kvm" accessible in your PATH?.
+
+ Retrying.
+E0608 19:11:51.229642   20599 start.go:165] Error starting host:  Error creating new host: Driver "kvm" not found. Do you have the plugin binary "docker-machine-driver-kvm" accessible in your PATH?
+[root@localhost Nigam_Docker]# 
+
+
+[root@localhost Nigam_Docker]# minikube start --vm-driver=KVM
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+F0608 19:11:59.662928   21068 cluster.go:212] Unsupported driver: KVM
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# minikube start --show-libmachine-logs
+Error: unknown flag: --show-libmachine-logs
+Usage:
+  minikube start [flags]
+
+Flags:
+      --apiserver-ips ipSlice          A set of apiserver IP Addresses which are used in the generated certificate for localkube/kubernetes.  This can be used if you want to make the apiserver available from outside the machine (default [])
+      --apiserver-name string          The apiserver name which is used in the generated certificate for localkube/kubernetes.  This can be used if you want to make the apiserver available from outside the machine (default "minikubeCA")
+      --apiserver-names stringArray    A set of apiserver names which are used in the generated certificate for localkube/kubernetes.  This can be used if you want to make the apiserver available from outside the machine
+      --cache-images                   If true, cache docker images for the current bootstrapper and load them into the machine. (default true)
+      --container-runtime string       The container runtime to be used
+      --cpus int                       Number of CPUs allocated to the minikube VM (default 2)
+      --disable-driver-mounts          Disables the filesystem mounts provided by the hypervisors (vboxfs, xhyve-9p)
+      --disk-size string               Disk size allocated to the minikube VM (format: <number>[<unit>], where unit = b, k, m or g) (default "20g")
+      --dns-domain string              The cluster dns domain name used in the kubernetes cluster (default "cluster.local")
+      --docker-env stringArray         Environment variables to pass to the Docker daemon. (format: key=value)
+      --docker-opt stringArray         Specify arbitrary flags to pass to the Docker daemon. (format: key=value)
+      --extra-config ExtraOption       A set of key=value pairs that describe configuration that may be passed to different components.
+		The key should be '.' separated, and the first part before the dot is the component to apply the configuration to.
+		Valid components are: kubelet, apiserver, controller-manager, etcd, proxy, scheduler.
+      --feature-gates string           A set of key=value pairs that describe feature gates for alpha/experimental features.
+  -h, --help                           help for start
+      --host-only-cidr string          The CIDR to be used for the minikube VM (only supported with Virtualbox driver) (default "192.168.99.1/24")
+      --hyperv-virtual-switch string   The hyperv virtual switch name. Defaults to first found. (only supported with HyperV driver)
+      --insecure-registry strings      Insecure Docker registries to pass to the Docker daemon.  The default service CIDR range will automatically be added.
+      --iso-url string                 Location of the minikube iso (default "https://storage.googleapis.com/minikube/iso/minikube-v0.26.0.iso")
+      --keep-context                   This will keep the existing kubectl context and will create a minikube context.
+      --kubernetes-version string      The kubernetes version that the minikube VM will use (ex: v1.2.3) 
+ OR a URI which contains a localkube binary (ex: https://storage.googleapis.com/minikube/k8sReleases/v1.3.0/localkube-linux-amd64) (default "v1.10.0")
+      --kvm-network string             The KVM network name. (only supported with KVM driver) (default "default")
+      --memory int                     Amount of RAM allocated to the minikube VM in MB (default 2048)
+      --mount                          This will start the mount daemon and automatically mount files into minikube
+      --mount-string string            The argument to pass the minikube mount command on start (default "/root:/minikube-host")
+      --network-plugin string          The name of the network plugin
+      --nfs-share strings              Local folders to share with Guest via NFS mounts (Only supported on with hyperkit now)
+      --nfs-shares-root string         Where to root the NFS Shares (defaults to /nfsshares, only supported with hyperkit now) (default "/nfsshares")
+      --registry-mirror strings        Registry mirrors to pass to the Docker daemon
+      --vm-driver string               VM driver is one of: [virtualbox vmwarefusion kvm xhyve hyperv hyperkit kvm2 none] (default "virtualbox")
+      --xhyve-disk-driver string       The disk driver to use [ahci-hd|virtio-blk] (only supported with xhyve driver) (default "ahci-hd")
+
+Global Flags:
+      --alsologtostderr                  log to standard error as well as files
+  -b, --bootstrapper string              The name of the cluster bootstrapper that will set up the kubernetes cluster. (default "kubeadm")
+      --log_backtrace_at traceLocation   when logging hits line file:N, emit a stack trace (default :0)
+      --log_dir string                   If non-empty, write log files in this directory
+      --loglevel int                     Log level (0 = DEBUG, 5 = FATAL) (default 1)
+      --logtostderr                      log to standard error instead of files
+  -p, --profile string                   The name of the minikube VM being used.  
+	This can be modified to allow for multiple minikube instances to be run independently (default "minikube")
+      --stderrthreshold severity         logs at or above this threshold go to stderr (default 2)
+  -v, --v Level                          log level for V logs
+      --vmodule moduleSpec               comma-separated list of pattern=N settings for file-filtered logging
+
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# rm ~/.minikube/cache/iso/minikube-0.5.iso
+rm: cannot remove ‘/root/.minikube/cache/iso/minikube-0.5.iso’: No such file or directory
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# ls -lrt
+total 72
+-rw-rw-r--. 1 nigam nigam  453 Apr 25 17:17 Docker-compose.Splunk_Enterprise.yml
+-rw-rw-r--. 1 nigam nigam  470 Apr 26 16:53 Docker-compose.create_httpd.mysql.yml
+-rw-rw-r--. 1 nigam nigam  513 May  3 23:33 Dockerfile.SSH-test
+-rw-rw-r--. 1 nigam nigam 3115 May  9 15:50 Docker-compose.Tomcat_Cluster_bkp2.yml
+-rw-rw-r--. 1 nigam nigam 2258 May 16 23:34 Docker-compose.Tomcat_Cluster.yml
+-rw-rw-r--. 1 nigam nigam 2275 May 17 10:11 Dockerfile.SetUp.Ansible
+-rw-rw-r--. 1 nigam nigam 1423 May 17 10:51 Dockerfile.Tomcat.Deploy.WAR
+-rw-rw-r--. 1 nigam nigam 1280 May 17 13:40 Dockerfile.jenkins-ansible
+-rw-rw-r--. 1 nigam nigam 1099 May 18 00:44 Dockerfile.cicd
+-rw-rw-r--. 1 nigam nigam 1409 May 19 12:00 Docker-compose.Tomcat_Cluster_bkp.yml
+drwxrwxr-x. 3 nigam nigam  236 May 19 13:00 Docker-compose.Tomcat.Loadbalance
+-rw-rw-r--. 1 nigam nigam 7214 May 19 14:25 Dockerfile.Tomcat
+-rw-rw-r--. 1 nigam nigam  996 May 19 16:19 Dockerfile.UbuntuSSH
+-rw-rw-r--. 1 nigam nigam 1988 May 20 00:08 Docker-compose.Sample.temp.yml
+drwxrwxr-x. 2 nigam nigam 4096 Jun  3 12:50 Docker-compose.CICD.Env.Example1
+-rw-rw-r--. 1 nigam nigam 1981 Jun  7 19:35 Dockerfile.SetUp.SSHD
+-rw-rw-r--. 1 nigam nigam 1078 Jun  8 09:52 Dockerfile1
+-rw-rw-r--. 1 nigam nigam  985 Jun  8 09:52 Dockerfile
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# find / -name minikube*.iso
+find: ‘/run/user/1000/gvfs’: Permission denied
+/root/.minikube/cache/iso/minikube-v0.26.0.iso
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# rm ~/.minikube/cache/iso/minikube-v0.26.0.iso 
+rm: remove regular file ‘/root/.minikube/cache/iso/minikube-v0.26.0.iso’? y
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# minikube start --iso-url="https://storage.googleapis.com/minikube/minikube-v0.26.0.iso"
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+Downloading Minikube ISO
+E0608 19:19:45.486520   11980 start.go:159] Error starting host: Error attempting to cache minikube ISO from URL: Error downloading Minikube ISO: failed to download: failed to download to temp file: download failed: 1 error(s) occurred:
+
+* received invalid status code: 404 (expected 200).
+
+ Retrying.
+E0608 19:19:45.487381   11980 start.go:165] Error starting host:  Error attempting to cache minikube ISO from URL: Error downloading Minikube ISO: failed to download: failed to download to temp file: download failed: 1 error(s) occurred:
+
+* received invalid status code: 404 (expected 200)
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# minikube start --iso-url="https://storage.googleapis.com/minikube/iso/minikube-v0.26.0.iso"
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+Downloading Minikube ISO
+ 150.53 MB / 150.53 MB [============================================] 100.00% 0s
+E0608 19:25:34.006108   22971 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
+: VBoxManage not found. Make sure VirtualBox is installed and VBoxManage is in the path.
+
+ Retrying.
+E0608 19:25:34.007372   22971 start.go:165] Error starting host:  Error creating host: Error executing step: Running precreate checks.
+: VBoxManage not found. Make sure VirtualBox is installed and VBoxManage is in the path
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# 
+[root@localhost Nigam_Docker]# yum install VirtualBox-5.2
+Loaded plugins: fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+ * base: repos-va.psychz.net
+ * epel: epel.mirror.constant.com
+ * extras: mirror.atlanticmetro.net
+ * updates: ftpmirror.your.org
+No package VirtualBox-5.2 available.
+Error: Nothing to do
+[root@localhost Nigam_Docker]# pwd
+/home/nigam/Nigam_DevOps/Nigam_Docker
+[root@localhost Nigam_Docker]# cd 
+[root@localhost ~]# cd /home/nigam/
+[root@localhost nigam]# cd Downloads/
+[root@localhost Downloads]# ls -lrt
+total 633096
+drwxr-xr-x. 3 nigam nigam        47 May 31  2015 docker-cluster-master
+-rw-rw-r--. 1 nigam nigam      1165 Apr  8 20:49 Resource.zip
+-rw-rw-r--. 1 nigam nigam     33851 Apr 11 08:23 Ex_Files_Devops_Fundamentals.zip
+-rw-rw-r--. 1 nigam nigam   9552281 May 10 15:26 apache-tomcat-8.5.31.tar.gz
+-rw-rw-r--. 1 nigam nigam       114 May 10 18:58 dev4
+-rw-rw-r--. 1 nigam nigam       801 May 10 18:59 hosts
+-rw-rw-r--. 1 nigam nigam  79677268 Jun  8 19:27 VirtualBox-5.2-5.2.12_122591_el7-1.x86_64.rpm
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+[root@localhost Downloads]# yum localinstall VirtualBox-5.2-5.2.12_122591_el7-1.x86_64.rpm 
+Loaded plugins: fastestmirror, langpacks
+Examining VirtualBox-5.2-5.2.12_122591_el7-1.x86_64.rpm: VirtualBox-5.2-5.2.12_122591_el7-1.x86_64
+Marking VirtualBox-5.2-5.2.12_122591_el7-1.x86_64.rpm to be installed
+Resolving Dependencies
+--> Running transaction check
+---> Package VirtualBox-5.2.x86_64 0:5.2.12_122591_el7-1 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+=================================================================================================================================================================================
+ Package                             Arch                        Version                                   Repository                                                       Size
+=================================================================================================================================================================================
+Installing:
+ VirtualBox-5.2                      x86_64                      5.2.12_122591_el7-1                       /VirtualBox-5.2-5.2.12_122591_el7-1.x86_64                      173 M
+
+Transaction Summary
+=================================================================================================================================================================================
+Install  1 Package
+
+Total size: 173 M
+Installed size: 173 M
+Is this ok [y/d/N]: y
+Downloading packages:
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : VirtualBox-5.2-5.2.12_122591_el7-1.x86_64                                                                                                                     1/1 
+
+Creating group 'vboxusers'. VM users must be member of that group!
+
+  Verifying  : VirtualBox-5.2-5.2.12_122591_el7-1.x86_64                                                                                                                     1/1 
+
+Installed:
+  VirtualBox-5.2.x86_64 0:5.2.12_122591_el7-1                                                                                                                                    
+
+Complete!
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+[root@localhost Downloads]# minikube start --iso-url="https://storage.googleapis.com/minikube/iso/minikube-v0.26.0.iso"
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+Getting VM IP address...
+Moving files into cluster...
+Downloading kubeadm v1.10.0
+Downloading kubelet v1.10.0
+Finished Downloading kubelet v1.10.0
+Finished Downloading kubeadm v1.10.0
+Setting up certs...
+Connecting to cluster...
+Setting up kubeconfig...
+Starting cluster components...
+Kubectl is now configured to use the cluster.
+Loading cached images from config file.
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+[root@localhost Downloads]# minikube dashboard
+Opening kubernetes dashboard in default browser...
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+[root@localhost Downloads]# netstat -a | grep 8080
+[root@localhost Downloads]# 
+[root@localhost Downloads]# 
+
+
+
+
