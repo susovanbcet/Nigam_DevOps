@@ -211,7 +211,8 @@ docker run -it --name nserver1 --rm busybox ifconfig -a
 	$ sudo nano /usr/share/applications/eclipse-oxygen.desktop
 	$ cd /usr/share/applications/
 
-
+21. Install Zoom 
+	https://support.zoom.us/hc/en-us/articles/204206269-Linux-Installation
 
 
 
